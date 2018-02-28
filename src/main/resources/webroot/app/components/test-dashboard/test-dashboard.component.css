@@ -1,0 +1,9 @@
+.main {
+    max-width: 90%;
+    margin: auto;
+    margin-top: 3em;
+}
+
+.close.icon{
+  cursor: pointer;
+}

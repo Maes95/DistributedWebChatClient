@@ -1,0 +1,103 @@
+<div class="main">
+  <h2 class="ui top attached header">
+    WebChatClient
+  </h2>
+  <div class="ui attached warning message">
+    <i class="warning icon"></i>
+    You've reached the end of this content segment!
+  </div>
+  <div class="ui attached segment">
+    <div class="ui grid stackable">
+      <div class="six wide column">
+        <form class="ui form">
+
+            <!-- APP DETAILS -->
+            <h4 class="ui dividing header">App details</h4>
+            <div class="field">
+              <div class="two fields">
+                <div class="four wide field">
+                  <label>App Name</label>
+                  <input type="text" name="app" placeholder="My app" [(ngModel)]="app.name">
+                </div>
+                <div class="field">
+                  <label>Entry point (address)</label>
+                  <input type="text" name="address" placeholder="127.0.0.1" [(ngModel)]="app.entryPoint">
+                </div>
+                <div class="four wide field">
+                  <label>Port</label>
+                  <input type="number" name="port" placeholder="5000" [(ngModel)]="app.port">
+                </div>
+              </div>
+            </div>
+            <div class="ui checkbox">
+              <input type="checkbox" name="example" [(ngModel)]="app.isDistributed">
+              <label>Distributed app</label>
+            </div>
+
+            <!-- TEST CASES -->
+            <h4 class="ui dividing header">Test cases</h4>
+            <table class="ui basic table">
+              <thead>
+                <tr>
+                  <th>Number of chat rooms</th>
+                  <th>Number of users per chat</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let case of app.cases;let i= index;">
+                  <td>
+                    <div class="ui transparent input fluid">
+                      <input type="number" [name]="'numChats_' + i" placeholder="Nº chats" [(ngModel)]="app.cases[i].numChats">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="ui transparent input fluid">
+                      <input type="number" [name]="'numUsers_' + i" placeholder="Nº users per chat" [(ngModel)]="app.cases[i].numUsers" (keydown)="addCaseEnter($event)">
+                    </div>
+                  </td>
+                  <td>
+                    <i class="red close icon" (click)="removeCase(i)"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="field">
+              <div class="ui button" (click)="addCase()">Add case</div>
+            </div>
+
+            <div class="ui button primary float-right" (click)="launchCase()">Test chat app</div>
+        </form>
+      </div>
+      <div class="ten wide column" >
+
+
+        <div id="analytics">
+          <div class="ui secondary menu">
+            <a class="item" *ngFor="let key of keys(time_graphics);let i = index;" [ngClass]="{'active': tab==i}" (click)="tabf(i)">{{ time_graphics[key].name }}</a>
+          </div>
+          <div *ngFor="let key of keys(time_graphics);let i = index;" class="ui tab" [ngClass]="{'active': tab==i}">
+            <ngx-charts-line-chart
+            [view]="view"
+            [scheme]="colorScheme"
+            [results]="time_graphics[key].times"
+            [gradient]="timesConfig.gradient"
+            [xAxis]="timesConfig.showXAxis"
+            [yAxis]="timesConfig.showYAxis"
+            [legend]="timesConfig.showLegend"
+            [showXAxisLabel]="timesConfig.showXAxisLabel"
+            [showYAxisLabel]="timesConfig.showYAxisLabel"
+            [xAxisLabel]="timesConfig.xAxisLabel"
+            [yAxisLabel]="timesConfig.yAxisLabel"
+            [autoScale]="true">
+          </ngx-charts-line-chart>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

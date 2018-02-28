@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Comparative Dashboard</title>
+    <!-- FOR ANGULAR ROUTING-->
+    <base href="/">
+    <!-- GLOBAL CSS-->
+    <link rel="stylesheet" href="/stylesheets/global.css">
+    <!-- ANGULAR 2 - CORE FILES-->
+    <script src="node_modules/core-js/client/shim.min.js"></script>
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="systemjs.config.js"></script>
+
+    <!-- Make vertx3-eventbus-client available! -->
+    <script src="node_modules/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="node_modules/vertx3-eventbus-client/vertx-eventbus.js"></script>
+    <!-- CHARTJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.min.js"></script>
+
+    <!-- External Javascript -->
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
+
+    <!-- External Styles -->
+    <link rel="stylesheet" href="http://rawgit.com/Semantic-Org/Semantic-UI/next/dist/semantic.css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+  </head>
+  <body>
+    <!-- ANGULAR STARTS HERE-->
+    <my-app>
+      <div class="loader">
+        <div class="inner one"></div>
+        <div class="inner two"></div>
+        <div class="inner three"></div>
+      </div>
+    </my-app>
+  </body>
+  <!-- LOAD APP-->
+  <script type="text/javascript">System.import('app').catch(function(err){ console.error(err); });</script>
+</html>
