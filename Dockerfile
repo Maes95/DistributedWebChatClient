@@ -9,7 +9,7 @@
 # Extend vert.x image
 FROM vertx/vertx3
 
-ENV VERTICLE_NAME web.Client
+ENV VERTICLE_NAME client.Client
 ENV VERTICLE_FILE target/WebChatTestMaven-1.0.jar
 
 # Set the location of the verticles

@@ -1,4 +1,4 @@
-package web;
+package client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,31 +17,31 @@ public class ClientManager extends AbstractVerticle{
 	public void start() {
 
 		JsonObject _config = new JsonObject()
-								.put("port", 9000)
+								.put("port", 5000)
 								.put("address", "localhost")
-								.put("numUsers", 10)
+								.put("numUsers", 17)
 								.put("numChatRooms", 4);
 
 
 
-		vertx.eventBus().consumer("new.test", (msg) -> {
+		vertx.eventBus().consumer("create.test", (msg) -> {
 			JsonObject config = (JsonObject) msg.body();
-			launchClient(REPEAT_LIMIT, (e)-> {
+			launchClient(REPEAT_LIMIT, config, new ArrayList<Long>(), (e)-> {
 				// CALLBACK AT FINISH
 				System.out.println(e.result());
-			}, config, new ArrayList<Long>());
+			});
 		});
 
-		vertx.eventBus().send("new.test", _config);
+		vertx.eventBus().send("create.test", _config);
 
 
 	}
 
-	public void launchClient(int count, Handler<AsyncResult<List<Long>>> handler, JsonObject config, List<Long> list) {
+	public void launchClient(int count, JsonObject config, List<Long> list, Handler<AsyncResult<List<Long>>> finishCallback) {
 		if(count == 0) {
-			handler.handle(Future.succeededFuture(list));
+			finishCallback.handle(Future.succeededFuture(list));
 		}else {
-			vertx.deployVerticle(new Client(
+			vertx.deployVerticle(new ClientGenerator(
 				// PORT
 				config.getInteger("port"),
 				// ADDRESS
@@ -54,7 +54,7 @@ public class ClientManager extends AbstractVerticle{
 				(e)-> {
 					list.add(e.result());
 					System.out.println(e.result());
-					this.launchClient(count-1, handler, config, list);
+					this.launchClient(count-1, config, list, finishCallback);
 				}
 			));
 		}
