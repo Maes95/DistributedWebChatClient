@@ -9,6 +9,9 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
+import models.Metrics;
+import models.Result;
+import models.TestConfig;
 
 public class ClientGenerator extends AbstractVerticle {
 
@@ -16,53 +19,57 @@ public class ClientGenerator extends AbstractVerticle {
 
 	public static final int NUM_MESSAGES = 500;
 	public static final int TIME = 5000;
+	public static final int DELAY = 1000;
 
 	// CLASS VARIABLES
-
-	private final int totalUsers;
-	private final int numChats;
-	private final int numUsersPerChat;
-	private final int port;
-	private final String address;
 	private int totalMessagePerChat;
-	private long total_avg_time = 0;
 
 	private final AtomicInteger sentMessages = new AtomicInteger(0);
 	private final AtomicLong times = new AtomicLong(0);
 	private final AtomicInteger done = new AtomicInteger(0);
 	private final AtomicBoolean finished = new AtomicBoolean(true);
-	private Handler<AsyncResult<Long>> handler;
+	private Handler<AsyncResult<Result>> handler;
+
+	private final Result result;
+	private final TestConfig config;
 
 
-  public ClientGenerator(int port, String address, int numChats, int numUsersPerChat, Handler<AsyncResult<Long>> handler) {
-	  this.port = port;
-	  this.address = address;
-	  this.numChats = numChats;
-	  this.numUsersPerChat = numUsersPerChat;
-	  this.totalUsers = numUsersPerChat * numChats;
-	  this.handler = handler;
-	  this.totalMessagePerChat = (NUM_MESSAGES*totalUsers) / numChats;
+  public ClientGenerator(TestConfig config, Result result, Handler<AsyncResult<Result>> handler) {
+		this.config = config;
+	  	this.result = result;
+		this.handler = handler;
+		this.totalMessagePerChat = (NUM_MESSAGES*config.getTotalUsers()) / config.getNumChats();
   }
 
   @Override
   public void start() throws Exception {
-	  for (int i = 0; i < totalUsers; i++) {
+	  for (int i = 0; i < config.getTotalUsers(); i++) {
 		  createClient(
                   // User name
                   "User" + Double.toString(Math.random()),
                   // Chat name
-                  "chat_"+(i%numChats),
+                  "chat_"+(i%config.getNumChats()),
                   // Total messages
-                  NUM_MESSAGES * numUsersPerChat * numUsersPerChat
+                  NUM_MESSAGES * config.getNumUsersPerChat() * config.getNumUsersPerChat()
           );
       }
+
+	  vertx.setPeriodic(DELAY, id ->{
+		  for (String node: config.getNodes() ) {
+              vertx.executeBlocking(future -> {
+                  future.complete(ClientUtils.getMetrics(config.getPem(), node));
+              }, res -> {
+                  result.addMetric(node, (Metrics) res.result());
+              });
+		  }
+	  });
   }
 
   public void createClient(String userName, String chatName, long totalMessages) {
 
 	  final AtomicInteger numberOfMessages = new AtomicInteger(0);
 
-	  vertx.createHttpClient().websocket(this.port, this.address, "/chat", websocket -> {
+	  vertx.createHttpClient().websocket(config.getPort(), config.getAddress(), "/chat", websocket -> {
 
 	  websocket.handler((Buffer buffer) -> {
           String respuesta = ClientUtils.parseBuffer(buffer);
@@ -74,7 +81,7 @@ public class ClientGenerator extends AbstractVerticle {
               websocket.close();
               // When ALL users recive all messages
               done.addAndGet(1);
-              if (done.get()==totalUsers){
+              if (done.get()==config.getTotalUsers()){
                   finishTest(totalMessages);
               }
           }
@@ -109,16 +116,16 @@ public class ClientGenerator extends AbstractVerticle {
 
   public synchronized void finishTest(long totalMessages){
       if(finished.get()){
-				finished.getAndSet(false);
-				long avg_time = times.get()/totalMessages;
-				total_avg_time += avg_time;
-				vertx.undeploy(this.deploymentID(), res -> {
-				  if (res.succeeded()) {
-					  handler.handle(Future.succeededFuture(total_avg_time));
-				  } else {
-				    System.out.println("Undeploy failed!");
-				  }
-				});
+			finished.getAndSet(false);
+			long avg_time = times.get()/totalMessages;
+		  	result.addTime(avg_time);
+			vertx.undeploy(this.deploymentID(), res -> {
+				if (res.succeeded()) {
+					handler.handle(Future.succeededFuture(result));
+				} else {
+					System.out.println("Undeploy failed!");
+				}
+			});
       }
   }
 

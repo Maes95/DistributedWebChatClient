@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -i pems/$1 $2 top -b -n 2 | grep "Cpu(s):" | awk '{ print $2 }'

@@ -30,3 +30,4 @@ dist/
 node_modules/
 package-lock.json
 dev_server/
+*.pem
