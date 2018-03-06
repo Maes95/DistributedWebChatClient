@@ -7,3 +7,33 @@
 .close.icon{
   cursor: pointer;
 }
+
+.chart-container{
+  display: inline-block;
+  width: 100%;
+  height: 250px;
+}
+
+.node-input{
+  margin-bottom: 1em;
+}
+
+.buttons-container{
+  min-height: 1em;
+}
+
+.buttons-container .button{
+  float: right;
+}
+
+input.error{
+  background: #fff6f6 !important;
+  border-color: #e0b4b4 !important;
+  color: #9f3a38 !important;
+}
+
+input.success{
+  background-color: #fcfff5 !important;
+  color: #2c662d !important;
+  border-color: #a3c293 !important;
+}

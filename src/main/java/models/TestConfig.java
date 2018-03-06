@@ -3,14 +3,14 @@ package models;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
+import java.util.AbstractQueue;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class TestConfig {
 
     private JsonObject config;
-    private int totalUsers;
-    private int numChats;
-    private int numUsersPerChat;
     private int port;
     private String address;
     private List<String> nodes;
@@ -18,6 +18,7 @@ public class TestConfig {
     private String app;
     private String globalDefinition;
     private String specificDefinition;
+    private Queue<Case> cases;
 
     public TestConfig(String _config){
         this.parse(new JsonObject(_config));
@@ -32,22 +33,26 @@ public class TestConfig {
         this.app = config.getString("app");
         this.port = config.getInteger("port");
         this.address = config.getString("address");
-        this.numChats = config.getInteger("numChatRooms");
-        this.numUsersPerChat = config.getInteger("numUsers");
         this.nodes = config.getJsonArray("nodes").getList();
         this.pem = config.getString("pem");
         this.globalDefinition = config.getString("globalDefinition");
         this.specificDefinition = config.getString("specificDefinition");
-        this.totalUsers = numUsersPerChat * numChats;
+        this.cases = new LinkedList<>();
+        for(Object o: config.getJsonArray("cases").getList()){
+            JsonObject _case = (JsonObject) o;
+            this.cases.add(new Case(_case.getInteger("numChats"),_case.getInteger("numUsers") ));
+        }
     }
 
     public JsonObject getConfig() { return config; }
 
-    public int getTotalUsers() { return totalUsers; }
+    public Case nextCase(){
+        return this.cases.poll();
+    }
 
-    public int getNumChats() { return numChats; }
-
-    public int getNumUsersPerChat() { return numUsersPerChat; }
+    public boolean casesEmpty(){
+        return this.cases.isEmpty();
+    }
 
     public int getPort() { return port; }
 

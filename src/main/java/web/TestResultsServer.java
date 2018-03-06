@@ -44,6 +44,7 @@ public class TestResultsServer extends AbstractVerticle {
 
         vertx.eventBus().consumer("new.test", (msg) -> {
             System.out.println(msg.body());
+            vertx.eventBus().publish("create.test", msg.body());
         });
 
         TestResultsServer.openBrowser();

@@ -2,9 +2,10 @@
   <h2 class="ui top attached header">
     WebChatClient
   </h2>
-  <div class="ui attached warning message">
-    <i class="warning icon"></i>
-    You've reached the end of this content segment!
+  <div class="ui attached message" *ngFor="let msg of messages; let i= index;" [ngClass]="msg.type" >
+    <i class="close icon" (click)="closeMessage(i)"></i>
+    <i class="icon" [ngClass]="msg.icon"></i>
+    {{ msg.text }}
   </div>
   <div class="ui attached segment">
     <div class="ui grid stackable">
@@ -33,6 +34,35 @@
               <input type="checkbox" name="example" [(ngModel)]="app.isDistributed">
               <label>Distributed app</label>
             </div>
+
+            <!-- APP DETAILS -->
+            <h4 *ngIf="app.isDistributed"class="ui dividing header">Nodes</h4>
+            <div *ngIf="app.isDistributed">
+
+              <div class="ui labeled input fluid icon node-input" *ngFor="let node of app.nodes; let i= index;">
+                <div class="ui label">
+                  ubuntu@
+                </div>
+                <input [ngClass]="node.status" type="text" placeholder="ec2-XXX-XXX-XXX-XXX.eu-west-1.compute.amazonaws.com" [(ngModel)]="app.nodes[i].url" [name]="'node'+i">
+                <i class="red close link icon" (click)="removeNode(i)"></i>
+              </div>
+
+              <div class="buttons-container">
+                <div class="ui button" (click)="addNode(i)">
+                  Add new node
+                </div>
+                <div class="ui basic button" [ngClass]="{'loading':loadingCheckNodes}" (click)="checkNodes()">
+                  Check nodes
+                </div>
+              </div>
+
+
+
+
+            </div>
+
+
+
 
             <!-- TEST CASES -->
             <h4 class="ui dividing header">Test cases</h4>
@@ -66,7 +96,7 @@
               <div class="ui button" (click)="addCase()">Add case</div>
             </div>
 
-            <div class="ui button primary float-right" (click)="launchCase()">Test chat app</div>
+            <button class="ui button primary float-right" (click)="launchCase()" [disabled]="!validForm()">Test chat app</button>
         </form>
       </div>
       <div class="ten wide column" >
@@ -74,23 +104,69 @@
 
         <div id="analytics">
           <div class="ui secondary menu">
-            <a class="item" *ngFor="let key of keys(time_graphics);let i = index;" [ngClass]="{'active': tab==i}" (click)="tabf(i)">{{ time_graphics[key].name }}</a>
+            <a class="item" *ngFor="let key of keys(time_graphics.data);let i = index;" [ngClass]="{'active': tab==i}" (click)="tabf(i)">{{ time_graphics.data[key].name }}</a>
           </div>
-          <div *ngFor="let key of keys(time_graphics);let i = index;" class="ui tab" [ngClass]="{'active': tab==i}">
-            <ngx-charts-line-chart
-            [view]="view"
-            [scheme]="colorScheme"
-            [results]="time_graphics[key].times"
-            [gradient]="timesConfig.gradient"
-            [xAxis]="timesConfig.showXAxis"
-            [yAxis]="timesConfig.showYAxis"
-            [legend]="timesConfig.showLegend"
-            [showXAxisLabel]="timesConfig.showXAxisLabel"
-            [showYAxisLabel]="timesConfig.showYAxisLabel"
-            [xAxisLabel]="timesConfig.xAxisLabel"
-            [yAxisLabel]="timesConfig.yAxisLabel"
-            [autoScale]="true">
-          </ngx-charts-line-chart>
+          <div *ngFor="let key of keys(time_graphics.data);let i = index;" class="ui tab" [ngClass]="{'active': tab==i}">
+
+            <div class="chart-container">
+              <!-- TIME CHART -->
+              <ngx-charts-line-chart
+                [scheme]="timeColor"
+                [results]="time_graphics.data[key].times"
+                [gradient]="timesConfig.gradient"
+                [xAxis]="timesConfig.showXAxis"
+                [yAxis]="timesConfig.showYAxis"
+                [legend]="timesConfig.showLegend"
+                [showXAxisLabel]="timesConfig.showXAxisLabel"
+                [showYAxisLabel]="timesConfig.showYAxisLabel"
+                [xAxisLabel]="timesConfig.xAxisLabel"
+                [yAxisLabel]="timesConfig.yAxisLabel"
+                [autoScale]="true">
+              </ngx-charts-line-chart>
+            </div>
+
+
+            <div class="chart-container">
+              <!-- CPU CHART -->
+              <ngx-charts-line-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="cpu_graphics.data[key].nodes"
+                [gradient]="cpuConfig.gradient"
+                [xAxis]="cpuConfig.showXAxis"
+                [yAxis]="cpuConfig.showYAxis"
+                [legend]="cpuConfig.showLegend"
+                [showXAxisLabel]="cpuConfig.showXAxisLabel"
+                [showYAxisLabel]="cpuConfig.showYAxisLabel"
+                [xAxisLabel]="cpuConfig.xAxisLabel"
+                [yAxisLabel]="cpuConfig.yAxisLabel"
+                [autoScale]="true">
+              </ngx-charts-line-chart>
+            </div>
+
+
+            <div class="chart-container">
+              <!-- RAM CHART -->
+              <ngx-charts-line-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="ram_graphics.data[key].nodes"
+                [gradient]="ramConfig.gradient"
+                [xAxis]="ramConfig.showXAxis"
+                [yAxis]="ramConfig.showYAxis"
+                [legend]="ramConfig.showLegend"
+                [showXAxisLabel]="ramConfig.showXAxisLabel"
+                [showYAxisLabel]="ramConfig.showYAxisLabel"
+                [xAxisLabel]="ramConfig.xAxisLabel"
+                [yAxisLabel]="ramConfig.yAxisLabel"
+                [autoScale]="true">
+              </ngx-charts-line-chart>
+            </div>
+
+
+
+
+
           </div>
         </div>
 

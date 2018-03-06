@@ -23,11 +23,11 @@ public class Result {
     private final ArrayList<Long> times;
     private final Map<String, List<Metrics>> nodeMetrics;
 
-    public Result(TestConfig config , int repeat_limit){
+    public Result(Case _case, TestConfig config , int repeat_limit){
         this.repeat_limit = repeat_limit;
         this.times = new ArrayList<>(repeat_limit);
-        this.numChats = config.getNumChats();
-        this.numUsers = config.getNumUsersPerChat();
+        this.numChats = _case.getNumChats();
+        this.numUsers = _case.getNumUsersPerChat();
         this.app = config.getApp();
         this.globalDefinition = config.getGlobalDefinition();
         this.specificDefinition = config.getSpecificDefinition();
@@ -48,11 +48,12 @@ public class Result {
         // TIMES
         JsonArray timesList = new JsonArray();
         long avg_time = 0;
+        this.times.remove(0); // REMOVE FIRST TIME, NO RELEVANT
         for(long time : this.getTimes()){
             avg_time += time;
             timesList.add(time);
         }
-        avg_time = avg_time / getRepeat_limit();
+        avg_time = avg_time / getRepeat_limit() - 1;
         response.put("avgTime", avg_time);
         response.put("times", timesList);
 
@@ -62,13 +63,15 @@ public class Result {
             double avg_cpu_use = 0;
             double avg_ram = 0;
             JsonObject nodeMetrics = new JsonObject();
+            JsonArray ramResults = new JsonArray();
+            JsonArray cpuUseResults = new JsonArray();
             for(Metrics metric : this.nodeMetrics.get(node)){
-                avg_cpu_use += metric.getCpu();
-                avg_ram += metric.getRam();
+                ramResults.add(metric.getRam());
+                cpuUseResults.add(metric.getCpu());
             }
             nodeMetrics.put("id", node);
-            nodeMetrics.put("avgCpuUse", avg_cpu_use / this.nodeMetrics.get(node).size());
-            nodeMetrics.put("avgRam", avg_ram / this.nodeMetrics.get(node).size());
+            nodeMetrics.put("cpuUse", cpuUseResults);
+            nodeMetrics.put("ram", ramResults);
             nodesMetrics.add(nodeMetrics);
         }
         response.put("nodesMetrics", nodesMetrics);

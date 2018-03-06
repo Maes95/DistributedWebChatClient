@@ -3,15 +3,16 @@ export interface Message{
 }
 
 export interface Result{
-  app: string
-  avgCpuUse: number
-  avgMemoryUse: number
-  avgRam: number
-  avgTime: number
-  avgVitualMemory: number
-  chatSize: number
-  globalDefinition: string
-  numUsers:number
-  specificDefinition:string
-  times: number[]
+  numChats: number;
+  numUsers: number;
+  app: string;
+  globalDefinition: string;
+  specificDefinition: string;
+  avgTime: number;
+  times: number[];
+  nodesMetrics: {
+      id: string;
+      cpuUse: number[];
+      ram: number[];
+  }[];
 }

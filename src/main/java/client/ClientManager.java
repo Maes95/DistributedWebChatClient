@@ -6,6 +6,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import models.Case;
 import models.Result;
 import models.TestConfig;
 
@@ -18,38 +19,59 @@ public class ClientManager extends AbstractVerticle{
 
 		vertx.eventBus().consumer("create.test", (msg) -> {
 			TestConfig config = new TestConfig((JsonObject) msg.body());
-			launchClient(REPEAT_LIMIT, config, new Result( config, REPEAT_LIMIT ), (e)-> {
-				// CALLBACK AT FINISH
-				System.out.println(e.result().toJson());
+			launchCase(config, (r)-> {
+				System.out.println(r.result());
 			});
 		});
 
+		test();
+
+	}
+
+	public void launchCase(TestConfig config, Handler<AsyncResult<String>> finishCallback){
+
+		if(config.casesEmpty()){
+			finishCallback.handle(Future.succeededFuture("FINISH"));
+		}else{
+			Case currentCase = config.nextCase();
+			launchClient(REPEAT_LIMIT, currentCase, config, new Result( currentCase, config, REPEAT_LIMIT ), (e)-> {
+				// NEW CASE RESULT
+				System.out.println("NEW RESULT "+currentCase+" :");
+				System.out.println(e.result().toJson());
+				launchCase(config, finishCallback);
+			});
+		}
+
+	}
+
+	public void launchClient(int count, Case _case, TestConfig config, Result result, Handler<AsyncResult<Result>> finishCallback) {
+
+		if(count == 0) {
+			finishCallback.handle(Future.succeededFuture(result));
+		}else {
+			vertx.deployVerticle(new ClientGenerator(_case, config, result,(e)-> {
+				// NEW ITERATION RESULT
+				System.out.println("RESULT ITERATION: "+ (REPEAT_LIMIT - count + 1));
+				this.launchClient(count-1, _case, config, result, finishCallback);
+			}));
+		}
+	}
+
+	private void test(){
 		JsonObject _config = new JsonObject()
-				.put("port", 5000)
+				.put("port", 9000)
 				.put("address", "localhost")
-				.put("numUsers", 10)
-				.put("numChatRooms", 2)
 				.put("app","Vertx")
 				.put("globalDefinition","")
 				.put("specificDefinition","")
 				.put("pem","Vertx.pem")
-				.put("nodes", new JsonArray()
-						.add("ubuntu@ec2-34-245-123-57.eu-west-1.compute.amazonaws.com")
-						.add("ubuntu@ec2-52-30-159-128.eu-west-1.compute.amazonaws.com")
+				.put("nodes", new JsonArray())
+				.put("cases", new JsonArray()
+						.add(new JsonObject().put("numChats", 1).put("numUsers", 5))
+						.add(new JsonObject().put("numChats", 1).put("numUsers", 10))
 				);
 
 		vertx.eventBus().send("create.test", _config);
-	}
-
-	public void launchClient(int count, TestConfig config, Result result, Handler<AsyncResult<Result>> finishCallback) {
-		if(count == 0) {
-			finishCallback.handle(Future.succeededFuture(result));
-		}else {
-			vertx.deployVerticle(new ClientGenerator(config,result,(e)-> {
-				System.out.println(e.result().toJson());
-				this.launchClient(count-1, config, result, finishCallback);
-			}));
-		}
 	}
 
 }

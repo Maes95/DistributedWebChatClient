@@ -9,6 +9,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
+import models.Case;
 import models.Metrics;
 import models.Result;
 import models.TestConfig;
@@ -17,8 +18,8 @@ public class ClientGenerator extends AbstractVerticle {
 
 	// CONSTANTS
 
-	public static final int NUM_MESSAGES = 500;
-	public static final int TIME = 5000;
+	public static final int NUM_MESSAGES = 100;
+	public static final int TIME = 1000;
 	public static final int DELAY = 1000;
 
 	// CLASS VARIABLES
@@ -29,40 +30,48 @@ public class ClientGenerator extends AbstractVerticle {
 	private final AtomicInteger done = new AtomicInteger(0);
 	private final AtomicBoolean finished = new AtomicBoolean(true);
 	private Handler<AsyncResult<Result>> handler;
+	private final int totalUsers;
 
 	private final Result result;
 	private final TestConfig config;
+	private final Case _case;
 
 
-  public ClientGenerator(TestConfig config, Result result, Handler<AsyncResult<Result>> handler) {
+  public ClientGenerator(Case _case, TestConfig config, Result result, Handler<AsyncResult<Result>> handler) {
+        this._case = _case;
 		this.config = config;
 	  	this.result = result;
 		this.handler = handler;
-		this.totalMessagePerChat = (NUM_MESSAGES*config.getTotalUsers()) / config.getNumChats();
+        this.totalUsers = _case.getNumUsersPerChat() * _case.getNumChats();
+		this.totalMessagePerChat = NUM_MESSAGES*_case.getNumUsersPerChat();
+
   }
 
   @Override
   public void start() throws Exception {
-	  for (int i = 0; i < config.getTotalUsers(); i++) {
+
+	  for (int i = 0; i < this.totalUsers; i++) {
 		  createClient(
                   // User name
                   "User" + Double.toString(Math.random()),
                   // Chat name
-                  "chat_"+(i%config.getNumChats()),
+                  "chat_"+(i%_case.getNumChats()),
                   // Total messages
-                  NUM_MESSAGES * config.getNumUsersPerChat() * config.getNumUsersPerChat()
+                  NUM_MESSAGES * _case.getNumUsersPerChat() * _case.getNumUsersPerChat()
           );
       }
 
-	  vertx.setPeriodic(DELAY, id ->{
-		  for (String node: config.getNodes() ) {
-              vertx.executeBlocking(future -> {
-                  future.complete(ClientUtils.getMetrics(config.getPem(), node));
-              }, res -> {
-                  result.addMetric(node, (Metrics) res.result());
-              });
-		  }
-	  });
+      if(config.getNodes().size() > 0){
+          vertx.setPeriodic(DELAY, id ->{
+              for (String node: config.getNodes() ) {
+                  vertx.executeBlocking(future -> {
+                      future.complete(ClientUtils.getMetrics(config.getPem(), node));
+                  }, res -> {
+                      result.addMetric(node, (Metrics) res.result());
+                  });
+              }
+          });
+      }
   }
 
   public void createClient(String userName, String chatName, long totalMessages) {
@@ -81,7 +90,7 @@ public class ClientGenerator extends AbstractVerticle {
               websocket.close();
               // When ALL users recive all messages
               done.addAndGet(1);
-              if (done.get()==config.getTotalUsers()){
+              if (done.get()==this.totalUsers){
                   finishTest(totalMessages);
               }
           }
