@@ -1,5 +1,6 @@
 package web;
 
+import client.ClientManager;
 import models.Result;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
@@ -42,8 +43,9 @@ public class TestResultsServer extends AbstractVerticle {
         // Start the web server and tell it to use the router to handle requests.
         vertx.createHttpServer().requestHandler(router::accept).listen(8080);
 
+        vertx.deployVerticle(new ClientManager());
+
         vertx.eventBus().consumer("new.test", (msg) -> {
-            System.out.println(msg.body());
             vertx.eventBus().publish("create.test", msg.body());
         });
 

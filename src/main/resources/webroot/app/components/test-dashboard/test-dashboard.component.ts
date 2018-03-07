@@ -15,10 +15,15 @@ declare var $:any;
 })
 export class TestDashboardComponent implements OnInit{
 
-  // INPUT
+  // VARS
 
-  app: any;
-  messages: any[] = [];
+
+  public app: any;
+  public messages: any[] = [];
+
+  public loadingCheckNodes:boolean = false;
+  public allNodesValid:boolean = false;
+  public loadingRequest:boolean = false;
 
   constructor(private _eventBus: VertEventBus, private _export: ExportService, private _fake: FakeResultsService, private _utils:UtilsService){}
 
@@ -26,33 +31,41 @@ export class TestDashboardComponent implements OnInit{
 
     this.tab = 0;
     this.app = {
-      name: "",
-      entryPoint: "",
-      port: undefined,
+      name: "Node",
+      address: "127.0.0.1",
+      port: 9000,
       isDistributed: false,
       nodes: [{ url: "", status: ""}],
       cases: [
         { numChats: 1, numUsers: 10 },
         { numChats: 1, numUsers: 20 },
         { numChats: 1, numUsers: 30 },
-        { numChats: 1, numUsers: 40 },
-        { numChats: 1, numUsers: 50 },
-        // { numChats: 2, numUsers: 20 },
-        // { numChats: 2, numUsers: 25 },
-        // { numChats: 2, numUsers: 30 },
-        // { numChats: 4, numUsers: 10 },
-        // { numChats: 4, numUsers: 12 },
-        // { numChats: 4, numUsers: 15 },
       ]
     }
+    // this.app = {
+    //   name: "",
+    //   address: "",
+    //   port: undefined,
+    //   isDistributed: false,
+    //   nodes: [{ url: "", status: ""}],
+    //   cases: [
+    //     { numChats: 1, numUsers: 10 },
+    //     { numChats: 1, numUsers: 20 },
+    //     { numChats: 1, numUsers: 30 },
+    //     { numChats: 1, numUsers: 40 },
+    //     { numChats: 1, numUsers: 50 },
+    //     // { numChats: 2, numUsers: 20 },
+    //     // { numChats: 2, numUsers: 25 },
+    //     // { numChats: 2, numUsers: 30 },
+    //     // { numChats: 4, numUsers: 10 },
+    //     // { numChats: 4, numUsers: 12 },
+    //     // { numChats: 4, numUsers: 15 },
+    //   ]
+    // }
 
-    // this._eventBus.send("new.test", "HOLA", null, (a:any, msg:any) => {
-    //   console.log(a, msg)
-    // });
-    //
-    // this._eventBus.addHandler("new.result", (err:any, message:Message) => {
-    //     console.log(message.body);
-    // }, []);
+    this._eventBus.addHandler("new.result", (err:any, message:Message) => {
+        this.addResult(message.body);
+    }, []);
   }
 
   public addNode(){
@@ -62,9 +75,6 @@ export class TestDashboardComponent implements OnInit{
   public removeNode(index:number){
     this.app.nodes.splice(index,1);
   }
-
-  public loadingCheckNodes:boolean = false;
-  public allNodesValid:boolean = false;
 
   public checkNodes(){
     this.loadingCheckNodes = true;
@@ -118,15 +128,16 @@ export class TestDashboardComponent implements OnInit{
   }
 
   public validForm(){
-    let validApp = this.app.name && this.app.entryPoint && this.app.port;
+    let validApp = this.app.name && this.app.address && this.app.port;
     let validDistributed = !this.app.isDistributed || (this.allNodesValid)
     return validApp && validDistributed;
   }
 
   public launchCase(){
-    // this._fake.generateResults((result:Result)=> {
-    //   if( result.app == "Vertx") this.addResult(result);
-    // });
+    this.loadingRequest = true;
+    this.app.nodes = this.app.nodes.filter( (node:any)=> node.url.length > 0 );
+    this.app.cases = this.app.cases.filter( (_case:any)=> _case.numChats && _case.numUsers );
+    this._eventBus.send("new.test", this.app);
   }
 
   // VIEW

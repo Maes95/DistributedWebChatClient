@@ -22,7 +22,7 @@
                 </div>
                 <div class="field">
                   <label>Entry point (address)</label>
-                  <input type="text" name="address" placeholder="127.0.0.1" [(ngModel)]="app.entryPoint">
+                  <input type="text" name="address" placeholder="127.0.0.1" [(ngModel)]="app.address">
                 </div>
                 <div class="four wide field">
                   <label>Port</label>
@@ -96,7 +96,7 @@
               <div class="ui button" (click)="addCase()">Add case</div>
             </div>
 
-            <button class="ui button primary float-right" (click)="launchCase()" [disabled]="!validForm()">Test chat app</button>
+            <button class="ui button primary float-right" (click)="launchCase()" [ngClass]="{'loading':loadingRequest }" [disabled]="!validForm() || loadingRequest ">Test chat app</button>
         </form>
       </div>
       <div class="ten wide column" >

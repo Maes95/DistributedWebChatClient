@@ -30,7 +30,7 @@ public class TestConfig {
 
     private void parse(JsonObject config){
         this.config = config;
-        this.app = config.getString("app");
+        this.app = config.getString("name");
         this.port = config.getInteger("port");
         this.address = config.getString("address");
         this.nodes = config.getJsonArray("nodes").getList();

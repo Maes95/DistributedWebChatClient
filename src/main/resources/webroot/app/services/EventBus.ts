@@ -63,11 +63,11 @@ export class VertEventBus  {
      * @param headers Filter messages on these headers. Optional.
      * @param replyCallback The callback that will be called when message arrive at server
      */
-    public send(address : string, message : string, headers : Array<string>, replyCallback : Function) {
+    public send(address : string, message : any, headers = new Array(), replyCallback = ()=>{}) {
       this.validate();
       let int = setInterval(()=> {
         if(this.eventBus.state == 1){
-          this.eventBus.send(address, message, headers, replyCallback);
+          this.eventBus.send(address, message, null, replyCallback);
           clearInterval(int);
         }
       }, 1000)

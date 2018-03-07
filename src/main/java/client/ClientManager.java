@@ -20,11 +20,9 @@ public class ClientManager extends AbstractVerticle{
 		vertx.eventBus().consumer("create.test", (msg) -> {
 			TestConfig config = new TestConfig((JsonObject) msg.body());
 			launchCase(config, (r)-> {
-				System.out.println(r.result());
+				vertx.eventBus().publish("finish", "FINISH");
 			});
 		});
-
-		test();
 
 	}
 
@@ -36,8 +34,8 @@ public class ClientManager extends AbstractVerticle{
 			Case currentCase = config.nextCase();
 			launchClient(REPEAT_LIMIT, currentCase, config, new Result( currentCase, config, REPEAT_LIMIT ), (e)-> {
 				// NEW CASE RESULT
-				System.out.println("NEW RESULT "+currentCase+" :");
-				System.out.println(e.result().toJson());
+				System.out.println("NEW RESULT "+currentCase);
+				vertx.eventBus().publish("new.result", e.result().toJson());
 				launchCase(config, finishCallback);
 			});
 		}
@@ -52,16 +50,18 @@ public class ClientManager extends AbstractVerticle{
 			vertx.deployVerticle(new ClientGenerator(_case, config, result,(e)-> {
 				// NEW ITERATION RESULT
 				System.out.println("RESULT ITERATION: "+ (REPEAT_LIMIT - count + 1));
+				vertx.eventBus().publish("new.interation", count);
 				this.launchClient(count-1, _case, config, result, finishCallback);
 			}));
 		}
+
 	}
 
 	private void test(){
 		JsonObject _config = new JsonObject()
 				.put("port", 9000)
 				.put("address", "localhost")
-				.put("app","Vertx")
+				.put("name","Vertx")
 				.put("globalDefinition","")
 				.put("specificDefinition","")
 				.put("pem","Vertx.pem")
