@@ -9,8 +9,6 @@ import models.Metrics;
 
 public class ClientUtils  {
 	
-	Json a = new Json();
-	
 	public static String parseBuffer(Buffer buff){
         JsonNode message = null;
         ObjectMapper mapper = new ObjectMapper();
@@ -37,7 +35,8 @@ public class ClientUtils  {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             ram = Integer.valueOf(reader.readLine());
         }catch(Exception e){
-            System.err.println(e.getMessage());
+            System.err.println("Can't get RAM usage");
+            System.err.println(e);
             ram = 0;
         }
 
@@ -53,7 +52,8 @@ public class ClientUtils  {
             reader.readLine();// FIRST LINE NOT RELEVANT
             cpu = Double.valueOf(reader.readLine().replace(',','.'));
         }catch(Exception e){
-            System.err.println(e.getMessage());
+            System.err.println("Can't get CPU usage");
+            System.err.println(e);
             cpu = 0.0;
         }
 

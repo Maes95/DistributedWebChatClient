@@ -53,7 +53,7 @@ public class Result {
             avg_time += time;
             timesList.add(time);
         }
-        avg_time = avg_time / getRepeat_limit() - 1;
+        avg_time = avg_time / (getRepeat_limit() - 1);
         response.put("avgTime", avg_time);
         response.put("times", timesList);
 

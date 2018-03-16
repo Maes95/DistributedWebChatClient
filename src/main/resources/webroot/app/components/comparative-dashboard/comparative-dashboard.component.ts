@@ -1,9 +1,8 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, AfterViewInit} from '@angular/core';
 import { Result, Message } from '../../models/result';
-import { VertEventBus } from '../../services/EventBus';
 import { ExportService } from '../../services/export.service';
 import { FakeResultsService } from '../../services/fakeResults.service';
-
+import { UtilsService } from '../../services/utils.service';
 import { BaseChartDirective } from 'ng2-charts';
 
 declare var $:any;
@@ -11,264 +10,354 @@ declare var $:any;
 @Component({
     selector: 'comparartive-dashboard',
     templateUrl: '../app/components/comparative-dashboard/comparative-dashboard.component.html',
-    providers: [VertEventBus,ExportService, FakeResultsService],
+    providers: [ExportService, FakeResultsService, UtilsService],
     styleUrls: ['./app/components/comparative-dashboard/comparative-dashboard.component.css']
 })
-export class ComparativeDashboardComponent implements OnInit{
+export class ComparativeDashboardComponent implements AfterViewInit{
 
-  @ViewChildren( BaseChartDirective ) charts: QueryList<BaseChartDirective>;
+  // VARS
 
-  STATIC:boolean = true;
+  public app: any;
+  public messages: any[] = [];
+  public results:Result[] = [];
 
-  timeOptions: Object;
-  cpuOptions: Object;
-  memoryOptions: Object;
+  public loadingCheckNodes:boolean = false;
+  public allNodesValid:boolean = false;
+  public doingTest:boolean = false;
 
-  colors:any[] = [];
+  constructor(private _export: ExportService, private _fake: FakeResultsService, private _utils:UtilsService){}
 
-  n = 0;
-  apps = {};
-  graphics = {};
-  empty = true;
-  selectedApp: Object;
-  currentItem: Object;
+  ngAfterViewInit(){
+    this._fake.generateResults((result:Result)=> this.addResult(result));
+  }
 
-  dataKeys = ["dataTimes", "dataCpuUse", "dataMemoryUse"];
-  dataKeysDescription = ["time (in ms)", "% CPU use", "memory use (in KBytes)"];
 
-  defaultColors:number[][] = [
-     [255, 99, 132],
-     [54, 162, 235],
-     [255, 206, 86],
-     [165, 105, 189],
-     [75, 192, 192],
-     [151, 187, 205],
-     [253, 180, 92],
-     [148, 159, 177],
-     [77, 83, 96]
-  ];
+  // VIEW
 
-  data:Array<any> = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-    {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
-    {data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}
-  ];
+  time_graphics = {
+    data: {}
+  };
+  cpu_graphics = {
+    data: {}
+  };
+  ram_graphics = {
+    data: {}
+  };
 
-  labels:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  apps:string[] = [];
+  app_index = {};
+  chats_index = {};
+  selectedApp:string;
 
-  showAll:boolean;
 
-  constructor(private _eventBus: VertEventBus, private _export: ExportService, private _fake: FakeResultsService){}
+  private addResult(result:Result){
+    this.results.push(result);
 
-  ngOnInit(){
-    for( let c of this.defaultColors ){
-      this.colors.push(this.formatLineColor(c));
+    let numChatsKey = 'numChats-'+result.numChats;
+    if(!this.chats_index[numChatsKey]) this.chats_index[numChatsKey] = result.numChats;
+    if(this.apps.indexOf(result.app) == -1) this.apps.push(result.app);
+    if(!this.selectedApp) this.selectedApp = result.app;
+    if(!this.globalNumChatsKey) this.globalNumChatsKey = numChatsKey;
+
+    // TIME GRAPHICS
+
+    if(this.time_graphics.data[numChatsKey] == undefined){
+      this.time_graphics.data[numChatsKey] = {
+        name: result.numChats+" room(s) - Time",
+        times: []
+      }
+      this.cpu_graphics.data[numChatsKey] = {
+        name: result.numChats+" room(s) - CPU use",
+        metrics: []
+      }
+      this.ram_graphics.data[numChatsKey] = {
+        name: result.numChats+" room(s) - RAM use",
+        metrics: []
+      }
+      this.app_index[numChatsKey] = {};
     }
-    this.selectedApp = {};
-    this.currentItem = { labels: [] };
-    this.timeOptions = this.getOptions('Time in milliseconds');
-    this.cpuOptions = this.getOptions('% of CPU');
-    this.memoryOptions = this.getOptions('Memory in KBytes');
 
-    if(window.location.host == "localhost:9000"){
-      // DEVELOPMENT
-      this._fake.generateResults((result:Result)=> this.addResult(result));
-    }else{
-      // PRODUCTION
-      this._eventBus.addHandler("new.result", (err:any, message:Message) => {
-          console.log(message.body);
-          this.addResult(message.body);
-      }, []);
+    if(this.app_index[numChatsKey][result.app] == undefined){
+      // TIME
+      this.time_graphics.data[numChatsKey].times.push({
+        "name": result.app + " - "+result.numChats+" room(s) - Time",
+        "series": []
+      })
+      // CPU
+      this.cpu_graphics.data[numChatsKey].metrics.push({
+        "name": result.app + " - "+result.numChats+" room(s) - CPU use",
+        "series": []
+      })
+      // RAM
+      this.ram_graphics.data[numChatsKey].metrics.push({
+        "name": result.app + " - "+result.numChats+" room(s) - Memory use",
+        "series": []
+      })
+      this.app_index[numChatsKey][result.app] = this.time_graphics.data[numChatsKey].times.length - 1;
+    }
+
+    let appIndex = this.app_index[numChatsKey][result.app];
+
+
+
+    // METRICS GRAPHICS
+    let ram:number = 0;
+    let cpu:number = 0;
+
+    for(let node of result.nodesMetrics){
+      cpu += (node.cpuUse.reduce( (a,b) => a + b ) / node.cpuUse.length)
+      ram += (node.ram.reduce( (a,b) => a + b ) / node.ram.length)
+    }
+
+    // TIME
+    this.time_graphics.data[numChatsKey].times[appIndex].series.push({
+      "name": result.numUsers.toString(),
+      "value": result.avgTime
+    });
+
+    // CPU
+    this.cpu_graphics.data[numChatsKey].metrics[appIndex].series.push({
+      "name": result.numUsers.toString(),
+      "value": cpu / result.nodesMetrics.length
+    });
+
+    // RAM
+    this.ram_graphics.data[numChatsKey].metrics[appIndex].series.push({
+      "name": result.numUsers.toString(),
+      "value": ram / result.nodesMetrics.length
+    });
+
+    // FORCE UPDATE
+    this.ram_graphics.data[numChatsKey].metrics = [...this.ram_graphics.data[numChatsKey].metrics];
+    this.cpu_graphics.data[numChatsKey].metrics = [...this.cpu_graphics.data[numChatsKey].metrics];
+    this.time_graphics.data[numChatsKey].times = [...this.time_graphics.data[numChatsKey].times];
+  }
+
+  cpu_node_graphics = {
+    data: {}
+  };
+  ram_node_graphics = {
+    data: {}
+  };
+  time_node_graphics = {
+    data: {}
+  };
+  node_index = {};
+
+  //nodeView = [300, 100]
+
+  public nodeGraph(name: string, numChats: number){
+
+    this.node_index = {};
+
+    var appResults = this.results.filter((result: Result) => result.app == name && result.numChats == numChats);
+    let numChatsKey = 'numChats-'+numChats;
+
+    delete this.cpu_node_graphics.data[numChatsKey];
+    delete this.ram_node_graphics.data[numChatsKey];
+    delete this.time_node_graphics.data[numChatsKey];
+
+    for(let result of appResults){
+
+      if(this.time_node_graphics.data[numChatsKey] == undefined){
+        this.time_node_graphics.data[numChatsKey] = {
+          name: result.numChats+" room(s) - Time",
+          times: [{
+            "name": result.app + " - "+result.numChats+" room(s) - Time",
+            "series": []
+          }]
+        }
+      }
+
+      // TIME
+      this.time_node_graphics.data[numChatsKey].times[0].series.push({
+        "name": result.numUsers.toString(),
+        "value": result.avgTime
+      });
+
+      if(this.cpu_node_graphics.data[numChatsKey] == undefined){
+        this.cpu_node_graphics.data[numChatsKey] = {
+          name: result.numChats+" room(s) - CPU use",
+          nodes: []
+        }
+      }
+
+      if(this.ram_node_graphics.data[numChatsKey] == undefined){
+        this.ram_node_graphics.data[numChatsKey] = {
+          name: result.numChats+" room(s) - RAM use",
+          nodes: []
+        }
+      }
+
+      for(let node of result.nodesMetrics){
+
+        if(!this.node_index[numChatsKey]) this.node_index[numChatsKey] = {};
+
+        if(this.node_index[numChatsKey][node.id] == undefined){
+          // CPU
+          this.cpu_node_graphics.data[numChatsKey].nodes.push({
+            "name": node.id,
+            "series": []
+          })
+          // RAM
+          this.ram_node_graphics.data[numChatsKey].nodes.push({
+            "name": node.id,
+            "series": []
+          })
+          this.node_index[numChatsKey][node.id] = this.cpu_node_graphics.data[numChatsKey].nodes.length - 1;
+        }
+
+        let node_index = this.node_index[numChatsKey][node.id];
+
+        // CPU
+        this.cpu_node_graphics.data[numChatsKey].nodes[node_index].series.push({
+          "name": result.numUsers.toString(),
+          "value": node.cpuUse.reduce( (a,b) => a + b ) / node.cpuUse.length
+        });
+
+        // RAM
+        this.ram_node_graphics.data[numChatsKey].nodes[node_index].series.push({
+          "name": result.numUsers.toString(),
+          "value": node.ram.reduce( (a,b) => a + b ) / node.ram.length
+        });
+
+      }
     }
   }
 
-  private formatLineColor(colors: number[]) {
-     return {
-         backgroundColor: 'rgba(0,0,0,0)',
-         borderColor: 'rgba('+colors+', 1)',
-         pointBackgroundColor: 'rgba('+colors+', 1)',
-         pointBorderColor: '#fff',
-         pointHoverBackgroundColor: '#fff',
-         pointHoverBorderColor: 'rgba('+colors+', 0.8)'
-     };
+  globalNumChatsKey:string;
+
+  public tabf(index:number){
+    let keys = this.keys(this.time_graphics.data);
+    this.globalNumChatsKey = keys[index];
+    this.tab=index;
+    this.nodeGraph(this.selectedApp, this.chats_index[this.globalNumChatsKey])
+    this.forceUpdate()
   }
 
-  private addResult(result: Result){
-    this.empty = false;
-    let chatSizeName = result.chatSize.toString();
-    // IF GRAFIC WITH N CHAT ROOMS EXISTS
-    if (!this.graphics[chatSizeName])
-      this.newGraphic(chatSizeName);
-    // IF LABEL IN GRAPHIC EXIST
-    let label = result.numUsers * result.numUsers * 500 * result.chatSize;
-    let index = this.graphics[chatSizeName].labels.indexOf(label)
-    if (index == -1) this.newLabel(label, chatSizeName);
-    // IF APP EXISTS
-    if (!this.apps[result.app])
-      this.newApp(result.app, result.globalDefinition, result.specificDefinition);
-    let k = this.apps[result.app].index;
-
-    this.graphics[chatSizeName].dataTimes[k].data.push(result.avgTime);
-    this.graphics[chatSizeName].dataCpuUse[k].data.push(Math.round(result.avgCpuUse));
-    this.graphics[chatSizeName].dataMemoryUse[k].data.push(Math.round(result.avgRam));
-
-    this.apps[result.app].results.push(result);
-
-    this.charts.forEach((chart) => chart.ngOnChanges({}) );
+  public tabApp(app:string){
+    this.selectedApp = app;
+    this.nodeGraph(this.selectedApp, this.chats_index[this.globalNumChatsKey])
+    this.forceUpdate()
   }
 
-  private newApp(app_name:string, globalDefinition:string, specificDefinition:string) {
-      this.apps[app_name] = {
-          name: app_name,
-          globalDefinition: globalDefinition,
-          specificDefinition: specificDefinition,
-          index: this.n,
-          results: []
-      }
-      this.n++;
-      for (let key in this.graphics) {
-          this.graphics[key].dataTimes.push({ data: [], label: app_name });
-          this.graphics[key].dataCpuUse.push({ data: [], label: app_name });
-          this.graphics[key].dataMemoryUse.push({ data: [], label: app_name });
-          this.graphics[key].series.push(app_name);
-      }
+  private forceUpdate(){
+    let keys = this.keys(this.time_graphics.data);
+    // FORCE UPDATE
+    for (let key of keys) {
+      this.time_graphics.data[key].times = [...this.time_graphics.data[key].times];
+      this.ram_graphics.data[key].metrics = [...this.ram_graphics.data[key].metrics];
+      this.cpu_graphics.data[key].metrics = [...this.cpu_graphics.data[key].metrics];
+    }
   }
 
-  private newGraphic(chatSizeName: string) {
-      this.graphics[chatSizeName] = {
-          chatSize: Number(chatSizeName),
-          title: "N users in " + chatSizeName + " chat room(s)",
-          labels: [],
-          series: [],
-          dataTimes: [],
-          dataCpuUse: [],
-          dataMemoryUse: [],
-          tab: 0
-      }
-      for (let key in this.apps) {
-          this.graphics[chatSizeName].series.push(key)
-          this.graphics[chatSizeName].dataTimes.push({ data: [], label: key });
-          this.graphics[chatSizeName].dataCpuUse.push({ data: [], label: key });
-          this.graphics[chatSizeName].dataMemoryUse.push({ data: [], label: key });
-      }
-      this.graphics[chatSizeName].current_tab = 'Response time';
-      this.graphics[chatSizeName].tab = 0
-      this.graphics[chatSizeName].visible = true;
+  public getAppColor(app:string){
+    return this.colorScheme.domain[this.apps.indexOf(app)];
   }
 
-  private newLabel(label: number, graphicName: string) {
-      this.graphics[graphicName].labels.push(label);
+  public getAppLineColor(){
+    var color = {
+      domain: [this.getAppColor(this.selectedApp)]
+    };
+    return color;
   }
 
-  private getOptions(legend: string):Object{
-     let options = {
-         scales: {
-             yAxes: [{
-                 ticks: {
-                     padding: 30,
-                 },
-                 scaleLabel: {
-                     display: true,
-                     labelString: legend
-                 },
-             }],
-             xAxes: [{
-                 gridLines: {
-                     lineWidth: 1,
-                     zeroLineColor: "rgba(0, 0, 0, 0)"
-                 },
-                 scaleLabel: {
-                     display: true,
-                     labelString: "Number of messages sent"
-                 },
-             }]
-         },
-         lineTension:1
-     };
-     return options;
- }
+  tab:number;
 
- public getData(graphic: any, tab: any, index:number): any{
-     return graphic[this.dataKeys[tab]][index].data;
- }
+  timesConfig = {
+    // Chart Options
+    showXAxis: true,
+    showYAxis : true,
+    gradient : true,
+    showLegend : true,
+    showXAxisLabel : true,
+    xAxisLabel : 'Nº of users per chat',
+    showYAxisLabel : true,
+    yAxisLabel : 'Time (in milliseconds)'
+  }
 
- /**
-  *  EXPORTS
-  */
+  cpuConfig = {
+    // Chart Options
+    showXAxis: true,
+    showYAxis : true,
+    gradient : true,
+    showLegend : true,
+    showXAxisLabel : true,
+    xAxisLabel : 'Nº of users per chat',
+    showYAxisLabel : true,
+    yAxisLabel : '% CPU used'
+  }
 
- public generateDocument () {
-     this.showAll = true;
-     this._export.toHTML("comparativeReport", "Comparative report");
-     setTimeout(() => this.showAll = false, 100);
- }
+  ramConfig = {
+    // Chart Options
+    showXAxis: true,
+    showYAxis : true,
+    gradient : true,
+    showLegend : true,
+    showXAxisLabel : true,
+    xAxisLabel : 'Nº of users per chat',
+    showYAxisLabel : true,
+    yAxisLabel : 'RAM used'
+  }
 
- public getGraphImg (item:any, selector:any) {
-     var elem = $('#' + item.chatSize + '-size-' + selector);
-     if(elem.length)
-         return elem[0].toDataURL("image/png");
- }
+  timesNodeConfig = {
+    // Chart Options
+    showXAxis: true,
+    showYAxis : true,
+    gradient : true,
+    showLegend : false,
+    showXAxisLabel : true,
+    xAxisLabel : 'Nº of users per chat',
+    showYAxisLabel : true,
+    yAxisLabel : 'Time (in milliseconds)'
+  }
 
- public saveImg (item:any) {
-   switch(item.tab){
-     case 0: this._export.toPNG( '#' + item.chatSize + '-size-times', item.title ); break;
-     case 1: this._export.toPNG( '#' + item.chatSize + '-size-cpu', item.title ); break;
-     case 2: this._export.toPNG( '#' + item.chatSize + '-size-memory', item.title ); break;
-   }
- }
+  cpuNodeConfig = {
+    // Chart Options
+    showXAxis: true,
+    showYAxis : true,
+    gradient : true,
+    showLegend : false,
+    showXAxisLabel : true,
+    xAxisLabel : 'Nº of users per chat',
+    showYAxisLabel : true,
+    yAxisLabel : '% CPU used'
+  }
 
- public saveData (item:any) {
-     this.currentItem = item;
-     this._export.toXLS($('#xls-results-dataTimes'), item.title);
-     this._export.toXLS($('#xls-results-dataCpuUse'), item.title);
-     this._export.toXLS($('#xls-results-dataMemoryUse'), item.title);
- }
+  ramNodeConfig = {
+    // Chart Options
+    showXAxis: true,
+    showYAxis : true,
+    gradient : true,
+    showLegend : false,
+    showXAxisLabel : true,
+    xAxisLabel : 'Nº of users per chat',
+    showYAxisLabel : true,
+    yAxisLabel : 'RAM used'
+  }
 
- public exportToJSON (appName:string, chatSize:number) {
-     var results = [];
-     for (var i in this.apps) {
-         for (var j = 0; j < this.apps[i].results.length; j++) {
-             var result = this.apps[i].results[j];
-             if (result.app != appName || (chatSize && Number(result.chatSize) != chatSize)) continue;
-             results.push(result);
-         }
-     }
-     var fileName = chatSize ? appName + "_" + chatSize + "_room" : appName;
-     this._export.toJSON(results, fileName);
- }
+  colorScheme = {
+    domain: ['#B901FC', '#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
 
- /**
-  *  VIEW FUNCTIONS
-  */
+  timeColor = {
+    domain: ['#0c4fab']
+  };
 
- getColor(index: number){
-   let color = this.colors[index];
-   return color ? color.borderColor : 'black';
- }
+  metricsColors = {
+    domain: ['#B03060','#FE9A76','#FFD700']
+  }
 
- openModal(app: any) {
-     this.selectedApp = this.apps[app.name];
-     $('#appDef.ui.modal').modal('show');
- }
+  public keys(object: Object){
+    return Object.keys(object);
+  }
 
- dropdown(elem:any) {
-
-     $(".item .menu").not(elem).slideUp("fast", function() {
-         $(".item .menu").removeClass('active visible');
-     });
-
-     if (!$(elem).hasClass('visible')) {
-         $(elem).addClass('active visible');
-         $(elem + " .menu").slideDown("fast");
-     } else {
-         $(elem + " .menu").slideUp("fast", function() {
-             $(elem).removeClass('active visible');
-         });
-     }
- }
-
- slideDown(graph:any) {
-     $('#' + graph.chatSize).slideToggle("fast");
-     graph.visible = !graph.visible;
- }
+  private find(array: Object[], key:string, value:any){
+    for (let i = 0; i < array.length; i++) {
+        if(array[i][key]==value){
+          return i;
+        };
+    }
+  }
 
 }

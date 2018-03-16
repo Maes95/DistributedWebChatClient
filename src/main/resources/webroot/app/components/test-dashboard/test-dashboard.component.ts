@@ -20,10 +20,11 @@ export class TestDashboardComponent implements OnInit{
 
   public app: any;
   public messages: any[] = [];
+  public results:Result[] = [];
 
   public loadingCheckNodes:boolean = false;
   public allNodesValid:boolean = false;
-  public loadingRequest:boolean = false;
+  public doingTest:boolean = false;
 
   constructor(private _eventBus: VertEventBus, private _export: ExportService, private _fake: FakeResultsService, private _utils:UtilsService){}
 
@@ -31,41 +32,30 @@ export class TestDashboardComponent implements OnInit{
 
     this.tab = 0;
     this.app = {
-      name: "Node",
+      name: "Vertx",
       address: "127.0.0.1",
-      port: 9000,
+      port: 5000,
+      pem: "Vertx.pem",
       isDistributed: false,
-      nodes: [{ url: "", status: ""}],
+      nodes: [
+        { url: "ec2-34-253-221-208.eu-west-1.compute.amazonaws.com:8080", status: ""},
+        { url: "ec2-176-34-156-230.eu-west-1.compute.amazonaws.com:8080", status: ""},
+      ],
       cases: [
-        { numChats: 1, numUsers: 10 },
-        { numChats: 1, numUsers: 20 },
-        { numChats: 1, numUsers: 30 },
+            { numChats: 1, numUsers: 10 },
+            { numChats: 1, numUsers: 20 },
+            { numChats: 1, numUsers: 30 },
+            { numChats: 1, numUsers: 40 },
+            { numChats: 1, numUsers: 50 },
+            { numChats: 2, numUsers: 20 },
+            { numChats: 2, numUsers: 25 },
+            { numChats: 2, numUsers: 30 },
+            { numChats: 4, numUsers: 10 },
+            { numChats: 4, numUsers: 12 },
+            { numChats: 4, numUsers: 15 },
       ]
     }
-    // this.app = {
-    //   name: "",
-    //   address: "",
-    //   port: undefined,
-    //   isDistributed: false,
-    //   nodes: [{ url: "", status: ""}],
-    //   cases: [
-    //     { numChats: 1, numUsers: 10 },
-    //     { numChats: 1, numUsers: 20 },
-    //     { numChats: 1, numUsers: 30 },
-    //     { numChats: 1, numUsers: 40 },
-    //     { numChats: 1, numUsers: 50 },
-    //     // { numChats: 2, numUsers: 20 },
-    //     // { numChats: 2, numUsers: 25 },
-    //     // { numChats: 2, numUsers: 30 },
-    //     // { numChats: 4, numUsers: 10 },
-    //     // { numChats: 4, numUsers: 12 },
-    //     // { numChats: 4, numUsers: 15 },
-    //   ]
-    // }
 
-    this._eventBus.addHandler("new.result", (err:any, message:Message) => {
-        this.addResult(message.body);
-    }, []);
   }
 
   public addNode(){
@@ -133,11 +123,37 @@ export class TestDashboardComponent implements OnInit{
     return validApp && validDistributed;
   }
 
+  public progress:any = {};
+
   public launchCase(){
-    this.loadingRequest = true;
-    this.app.nodes = this.app.nodes.filter( (node:any)=> node.url.length > 0 );
+    this.doingTest = true;
+    this.app.nodes = this.app.nodes.filter( (node:any)=> node.url.length > 0 ).map((node:any) => "ubuntu@"+node.url.split(':')[0] );
     this.app.cases = this.app.cases.filter( (_case:any)=> _case.numChats && _case.numUsers );
     this._eventBus.send("new.test", this.app);
+
+    this.progress = {
+      numInteration : 0,
+      index : 0,
+      label : this.app.cases[0].numChats + " chats / "+ this.app.cases[0].numUsers +" users per chat"
+    }
+
+    this._eventBus.addHandler("new.result", (err:any, message:Message<Result>) => {
+        this.addResult(message.body);
+        this.progress.numInteration = 0;
+        this.progress.index++;
+        if(this.progress.index < this.app.cases.length)
+          this.progress.label = this.app.cases[this.progress.index].numChats + " chats / "+ this.app.cases[this.progress.index].numUsers +" users per chat";
+    }, []);
+
+    this._eventBus.addHandler("new.interation", (err:any, message:Message<any>) => {
+        this.progress.numInteration+=10;
+    }, []);
+
+    this._eventBus.addHandler("finish", (err:any, message:Message<any>) => {
+        this.progress.numInteration=100;
+        this.progress.label="All test completed";
+        this._export.toJSON( this.results, this.app.name );
+    }, []);
   }
 
   // VIEW
@@ -156,6 +172,7 @@ export class TestDashboardComponent implements OnInit{
 
 
   private addResult(result:Result){
+    this.results.push(result);
     let numChatsKey = 'numChats-'+result.numChats;
 
     if(this.time_graphics.data[numChatsKey] == undefined){
@@ -228,7 +245,7 @@ export class TestDashboardComponent implements OnInit{
     this.time_graphics.data[numChatsKey].times = [...this.time_graphics.data[numChatsKey].times];
   }
 
-  tabf(index:number){
+  public tabf(index:number){
     let keys = this.keys(this.time_graphics.data);
     // FORCE UPDATE
     for (let key of keys) {

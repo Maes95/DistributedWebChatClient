@@ -1,2 +1,2 @@
 mvn install
-vertx run client.ClientManager -cp target/*
+vertx run web.TestResultsServer -cp target/*

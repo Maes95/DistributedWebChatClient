@@ -1,5 +1,5 @@
-export interface Message{
-  body:Result;
+export interface Message<T>{
+  body:T;
 }
 
 export interface Result{

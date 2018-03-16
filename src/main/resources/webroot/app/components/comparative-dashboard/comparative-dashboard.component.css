@@ -1,165 +1,27 @@
-@media(min-width:768px) {
-  #selection-segment{
-      width: 30em;
-      height: 13em;
-      margin: auto;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-  }
-}
-
-.hide{
-  display: none;
-}
-
-.modal .content{
-  padding-left: 6em !important;
-  padding-right: 6em !important;
-  padding-bottom: 4em !important;
-  padding-top: 3em !important;
-}
-
-p.huge-font{
-  font-size: 1.3em;
-}
-
-.center-text{
-  text-align: center;
-}
-
-#appDef{
-  top: 35% !important;
-}
-
 .main {
     max-width: 90%;
     margin: auto;
     margin-top: 3em;
 }
 
-h2.ui.header {
-    margin-top: 0;
-    text-align: center;
+.close.icon{
+  cursor: pointer;
 }
 
-table td{
-	text-align: center !important;
-}
-
-table td.app-name{
-  font-size: 0.9em !important;
-  font-weight: bold;
-}
-
-.metrics-menu{
-  width: 100% !important;
-}
-
-table td.metric{
-	font-size: 0.8em !important;
-}
-
-table td.collapsing{
-	font-weight: bold;
-}
-
-td{
-  font-size: 0.9em !important;
-}
-
-.export-button{
-  float: right;
-}
-
-.segment.statistic {
-    margin: 0 !important;
-    width: 24%;
-    font-size: 0.9em !important;
-}
-
-.ui.top.attached.segment {
-    background: #F9FAFB;
-}
-
-.item.title{
-  font-size: 1.1em;
-  font-weight: bold !important;
-}
-
-.item .menu{
-  width: 15em;
-}
-
-
-.load-box-init{
-    width: 35%;
-    margin: auto !important;
-    margin-top: 5% !important;
-}
-
-.load-box-final{
-
-}
-
-.load-button-init{
-  margin-top: 1em !important;
+.chart-container{
+  display: inline-block;
   width: 100%;
+  height: 250px;
 }
 
-.load-button-final{
-
-
+.node-input{
+  margin-bottom: 1em;
 }
 
-/**
-  DRAG AND DROP
-*/
-
-.drop{
-  position: absolute;
+.buttons-container{
+  min-height: 1em;
 }
 
-article
-{
-    width: 80%;
-    margin:auto;
-    margin-top:10px;
-}
-
-
-.drop-area
-{
-    border: 3px dotted rgba(0,0,0,0.5);
-    padding: 50px;
-    text-align: center;
-}
-
-.drag
-{
-    border: 3px dotted rgba(0,0,0,0.2);
-    background-color: rgba(0,0,0,0.1);
-}
-
-#result ul{
-    list-style: none;
-    margin-top:20px;
-}
-
-#result ul li
-{
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 10px;
-}
-
-.file.big.icon{
-    display: block;
-    margin-right: 0 !important;
-    margin-bottom: 7px;
-}
-
-#comparativeReport{
-  display: none;
+.buttons-container .button{
+  float: right;
 }
