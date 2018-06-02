@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class TestResultsServer extends AbstractVerticle {
 
     @Override
-    public void start() throws Exception {
+    public void start() {
 
         Router router = Router.router(vertx);
 

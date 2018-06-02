@@ -48,7 +48,7 @@ public class ClientGenerator extends AbstractVerticle {
   }
 
   @Override
-  public void start() throws Exception {
+  public void start() {
 
 	  for (int i = 0; i < this.totalUsers; i++) {
 		  createClient(
@@ -61,7 +61,7 @@ public class ClientGenerator extends AbstractVerticle {
           );
       }
 
-      if(config.getNodes().size() > 0){
+      if(config.isDistributed()){
           vertx.setPeriodic(DELAY, id ->{
               for (String node: config.getNodes() ) {
                   vertx.executeBlocking(future -> {

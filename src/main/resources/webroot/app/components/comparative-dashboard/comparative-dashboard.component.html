@@ -81,6 +81,10 @@
         <a class="item" *ngFor="let app of apps;let i = index;" [ngClass]="{'active': selectedApp==app }" [ngStyle]="{'color' : colorScheme.domain[apps.indexOf(app)]}" (click)="tabApp(app)">{{ app }}</a>
       </div>
 
+      <h3 class="ui dividing header">
+        {{ selectedApp }} response times
+      </h3>
+
       <div class="chart-container">
         <!-- TIME CHART -->
         <ngx-charts-line-chart
@@ -97,6 +101,10 @@
           [autoScale]="true">
         </ngx-charts-line-chart>
       </div>
+
+      <h3 class="ui dividing header">
+        {{selectedApp }} node's metrics
+      </h3>
 
       <div class="chart-container">
         <!-- CPU CHART NODES -->

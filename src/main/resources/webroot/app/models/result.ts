@@ -10,6 +10,7 @@ export interface Result{
   specificDefinition: string;
   avgTime: number;
   times: number[];
+  isDistributed?: boolean;
   nodesMetrics: {
       id: string;
       cpuUse: number[];

@@ -29,6 +29,9 @@ export class ComparativeDashboardComponent implements AfterViewInit{
 
   ngAfterViewInit(){
     this._fake.generateResults((result:Result)=> this.addResult(result));
+    setTimeout(()=>{
+      this.tabf(0);
+    },10)
   }
 
 
@@ -67,11 +70,11 @@ export class ComparativeDashboardComponent implements AfterViewInit{
         times: []
       }
       this.cpu_graphics.data[numChatsKey] = {
-        name: result.numChats+" room(s) - CPU use",
+        name: result.numChats+" room(s) - %CPU use",
         metrics: []
       }
       this.ram_graphics.data[numChatsKey] = {
-        name: result.numChats+" room(s) - RAM use",
+        name: result.numChats+" room(s) - RAM use (in MBytes)",
         metrics: []
       }
       this.app_index[numChatsKey] = {};
@@ -85,12 +88,12 @@ export class ComparativeDashboardComponent implements AfterViewInit{
       })
       // CPU
       this.cpu_graphics.data[numChatsKey].metrics.push({
-        "name": result.app + " - "+result.numChats+" room(s) - CPU use",
+        "name": result.app + " - "+result.numChats+" room(s) - %CPU use",
         "series": []
       })
       // RAM
       this.ram_graphics.data[numChatsKey].metrics.push({
-        "name": result.app + " - "+result.numChats+" room(s) - Memory use",
+        "name": result.app + " - "+result.numChats+" room(s) - Memory use (in MBytes)",
         "series": []
       })
       this.app_index[numChatsKey][result.app] = this.time_graphics.data[numChatsKey].times.length - 1;

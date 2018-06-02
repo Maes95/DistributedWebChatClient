@@ -32,14 +32,14 @@ export class TestDashboardComponent implements OnInit{
 
     this.tab = 0;
     this.app = {
-      name: "Vertx",
+      name: "RabbitMQ",
       address: "127.0.0.1",
       port: 5000,
-      pem: "Vertx.pem",
+      pem: "TFG.pem",
       isDistributed: false,
       nodes: [
-        { url: "ec2-34-253-221-208.eu-west-1.compute.amazonaws.com:8080", status: ""},
-        { url: "ec2-176-34-156-230.eu-west-1.compute.amazonaws.com:8080", status: ""},
+        { url: "ec2-34-244-127-84.eu-west-1.compute.amazonaws.com:9000", status: ""},
+        { url: "ec2-34-243-28-134.eu-west-1.compute.amazonaws.com:9000", status: ""},
       ],
       cases: [
             { numChats: 1, numUsers: 10 },
@@ -172,6 +172,7 @@ export class TestDashboardComponent implements OnInit{
 
 
   private addResult(result:Result){
+    console.log(result);
     this.results.push(result);
     let numChatsKey = 'numChats-'+result.numChats;
 
@@ -219,17 +220,19 @@ export class TestDashboardComponent implements OnInit{
 
       let node_index = this.node_index[numChatsKey][node.id];
 
-      // CPU
-      this.cpu_graphics.data[numChatsKey].nodes[node_index].series.push({
-        "name": result.numUsers.toString(),
-        "value": node.cpuUse.reduce( (a,b) => a + b ) / node.cpuUse.length
-      });
+      if(result.isDistributed){
+        // CPU
+        this.cpu_graphics.data[numChatsKey].nodes[node_index].series.push({
+          "name": result.numUsers.toString(),
+          "value": node.cpuUse.reduceRight( (a,b) => a + b , 0) / node.cpuUse.length
+        });
 
-      // RAM
-      this.ram_graphics.data[numChatsKey].nodes[node_index].series.push({
-        "name": result.numUsers.toString(),
-        "value": node.ram.reduce( (a,b) => a + b ) / node.ram.length
-      });
+        // RAM
+        this.ram_graphics.data[numChatsKey].nodes[node_index].series.push({
+          "name": result.numUsers.toString(),
+          "value": node.ram.reduceRight( (a,b) => a + b , 0) / node.ram.length
+        });
+      }
 
     }
 

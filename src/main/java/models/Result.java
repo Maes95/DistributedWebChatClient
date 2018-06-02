@@ -20,6 +20,7 @@ public class Result {
     private final String app;
     private final String globalDefinition;
     private final String specificDefinition;
+    private final boolean isDistributed;
     private final ArrayList<Long> times;
     private final Map<String, List<Metrics>> nodeMetrics;
 
@@ -29,6 +30,7 @@ public class Result {
         this.numChats = _case.getNumChats();
         this.numUsers = _case.getNumUsersPerChat();
         this.app = config.getApp();
+        this.isDistributed = config.isDistributed();
         this.globalDefinition = config.getGlobalDefinition();
         this.specificDefinition = config.getSpecificDefinition();
         this.nodeMetrics = new HashMap<>();
@@ -42,6 +44,7 @@ public class Result {
         response.put("numChats", this.getNumChats());
         response.put("numUsers", this.getNumUsers());
         response.put("app", this.getApp());
+        response.put("isDistributed", this.isDistributed);
         response.put("globalDefinition", this.getGlobalDefinition());
         response.put("specificDefinition", this.getSpecificDefinition());
 
