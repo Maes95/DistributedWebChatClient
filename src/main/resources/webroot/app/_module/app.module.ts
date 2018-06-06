@@ -25,7 +25,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     routing,
     FormsModule,
     ChartsModule,
-    NgxChartsModule
+    NgxChartsModule,
+    HttpModule
   ],
   declarations: [
     AppComponent,

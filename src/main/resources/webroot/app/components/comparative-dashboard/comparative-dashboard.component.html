@@ -1,5 +1,5 @@
 <div class="main">
-  <h2 class="ui top attached header" (click)="nodeGraph('Akka', 2)">
+  <h2 class="ui top attached header">
     WebChatClient - Comparative
   </h2>
 
@@ -11,6 +11,16 @@
 
         <div id="analytics">
           <div class="ui secondary menu">
+            <div class="ui selection dropdown">
+              <input type="hidden" name="gender">
+              <i class="dropdown icon"></i>
+              <div class="default text">2 Nodes</div>
+              <div class="menu">
+                <div class="item" (click)="tabNodeNum(2)">2 Nodes</div>
+                <div class="item" (click)="tabNodeNum(3)">3 Nodes</div>
+                <div class="item" (click)="tabNodeNum(4)">4 Nodes</div>
+              </div>
+            </div>
             <a class="item" *ngFor="let key of keys(time_graphics.data);let i = index;" [ngClass]="{'active': tab==i}" (click)="tabf(i)">{{ time_graphics.data[key].name }}</a>
           </div>
           <div *ngFor="let key of keys(time_graphics.data);let i = index;" class="ui tab" [ngClass]="{'active': tab==i}">
@@ -103,7 +113,7 @@
       </div>
 
       <h3 class="ui dividing header">
-        {{selectedApp }} node's metrics
+        {{ selectedApp }} node's metrics
       </h3>
 
       <div class="chart-container">

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Result, Message } from '../../models/result';
 import { VertEventBus } from '../../services/EventBus';
 import { ExportService } from '../../services/export.service';
-import { FakeResultsService } from '../../services/fakeResults.service';
+import { ResultsService } from '../../services/fakeResults.service';
 import { UtilsService } from '../../services/utils.service';
 
 declare var $:any;
@@ -10,7 +10,7 @@ declare var $:any;
 @Component({
     selector: 'test-dashboard',
     templateUrl: '../app/components/test-dashboard/test-dashboard.component.html',
-    providers: [VertEventBus,ExportService, FakeResultsService, UtilsService],
+    providers: [VertEventBus,ExportService, ResultsService, UtilsService],
     styleUrls: ['./app/components/test-dashboard/test-dashboard.component.css']
 })
 export class TestDashboardComponent implements OnInit{
@@ -26,7 +26,7 @@ export class TestDashboardComponent implements OnInit{
   public allNodesValid:boolean = false;
   public doingTest:boolean = false;
 
-  constructor(private _eventBus: VertEventBus, private _export: ExportService, private _fake: FakeResultsService, private _utils:UtilsService){}
+  constructor(private _eventBus: VertEventBus, private _export: ExportService, private _fake: ResultsService, private _utils:UtilsService){}
 
   ngOnInit(){
 

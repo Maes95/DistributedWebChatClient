@@ -1,7 +1,7 @@
 import { Component, AfterViewInit} from '@angular/core';
 import { Result, Message } from '../../models/result';
 import { ExportService } from '../../services/export.service';
-import { FakeResultsService } from '../../services/fakeResults.service';
+import { ResultsService } from '../../services/fakeResults.service';
 import { UtilsService } from '../../services/utils.service';
 import { BaseChartDirective } from 'ng2-charts';
 
@@ -10,7 +10,7 @@ declare var $:any;
 @Component({
     selector: 'comparartive-dashboard',
     templateUrl: '../app/components/comparative-dashboard/comparative-dashboard.component.html',
-    providers: [ExportService, FakeResultsService, UtilsService],
+    providers: [ExportService, ResultsService, UtilsService],
     styleUrls: ['./app/components/comparative-dashboard/comparative-dashboard.component.css']
 })
 export class ComparativeDashboardComponent implements AfterViewInit{
@@ -20,22 +20,49 @@ export class ComparativeDashboardComponent implements AfterViewInit{
   public app: any;
   public messages: any[] = [];
   public results:Result[] = [];
+  public allResults:Result[] = [];
 
   public loadingCheckNodes:boolean = false;
   public allNodesValid:boolean = false;
   public doingTest:boolean = false;
 
-  constructor(private _export: ExportService, private _fake: FakeResultsService, private _utils:UtilsService){}
+  constructor(private _export: ExportService, private _resultService: ResultsService, private _utils:UtilsService){}
 
-  ngAfterViewInit(){
-    this._fake.generateResults((result:Result)=> this.addResult(result));
-    setTimeout(()=>{
-      this.tabf(0);
-    },10)
+  async ngAfterViewInit(){
+    this.allResults = await this._resultService.getResults();
+    this.tabNodeNum(2);
+    $('.ui.dropdown').dropdown();
+  }
+
+  public tabNodeNum(n:number){
+    this.initGraphs();
+    this.allResults
+      .filter((result:Result)=> result.nodesMetrics.length == n)
+      .forEach((result: Result) => this.addResult(result));
+    this.tabf(0);
+    console.log(this.results)
+  }
+
+  public initGraphs(){
+    this.results = [];
+    this.time_graphics = {
+      data: {}
+    };
+    this.cpu_graphics = {
+      data: {}
+    };
+    this.ram_graphics = {
+      data: {}
+    };
+
+    this.apps = [];
+    this.app_index = {};
+    this.chats_index = {};
+    this.selectedApp;
   }
 
 
-  // VIEW
+  // COMPARATIVE VIEW
 
   time_graphics = {
     data: {}
@@ -51,6 +78,20 @@ export class ComparativeDashboardComponent implements AfterViewInit{
   app_index = {};
   chats_index = {};
   selectedApp:string;
+
+
+  // SPECIFIC VIEW
+
+  cpu_node_graphics = {
+    data: {}
+  };
+  ram_node_graphics = {
+    data: {}
+  };
+  time_node_graphics = {
+    data: {}
+  };
+  node_index = {};
 
 
   private addResult(result:Result){
@@ -108,8 +149,8 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     let cpu:number = 0;
 
     for(let node of result.nodesMetrics){
-      cpu += (node.cpuUse.reduce( (a,b) => a + b ) / node.cpuUse.length)
-      ram += (node.ram.reduce( (a,b) => a + b ) / node.ram.length)
+      cpu += (node.cpuUse.reduceRight( (a,b) => a + b , 0) / node.cpuUse.length)
+      ram += (node.ram.reduceRight( (a,b) => a + b , 0) / node.ram.length)
     }
 
     // TIME
@@ -135,17 +176,6 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     this.cpu_graphics.data[numChatsKey].metrics = [...this.cpu_graphics.data[numChatsKey].metrics];
     this.time_graphics.data[numChatsKey].times = [...this.time_graphics.data[numChatsKey].times];
   }
-
-  cpu_node_graphics = {
-    data: {}
-  };
-  ram_node_graphics = {
-    data: {}
-  };
-  time_node_graphics = {
-    data: {}
-  };
-  node_index = {};
 
   //nodeView = [300, 100]
 
@@ -215,13 +245,13 @@ export class ComparativeDashboardComponent implements AfterViewInit{
         // CPU
         this.cpu_node_graphics.data[numChatsKey].nodes[node_index].series.push({
           "name": result.numUsers.toString(),
-          "value": node.cpuUse.reduce( (a,b) => a + b ) / node.cpuUse.length
+          "value": node.cpuUse.reduceRight( (a,b) => a + b , 0) / node.cpuUse.length
         });
 
         // RAM
         this.ram_node_graphics.data[numChatsKey].nodes[node_index].series.push({
           "name": result.numUsers.toString(),
-          "value": node.ram.reduce( (a,b) => a + b ) / node.ram.length
+          "value": node.ram.reduceRight( (a,b) => a + b , 0) / node.ram.length
         });
 
       }
@@ -300,7 +330,7 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     showXAxisLabel : true,
     xAxisLabel : 'Nº of users per chat',
     showYAxisLabel : true,
-    yAxisLabel : 'RAM used'
+    yAxisLabel : 'RAM used (MBytes)'
   }
 
   timesNodeConfig = {
@@ -336,7 +366,7 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     showXAxisLabel : true,
     xAxisLabel : 'Nº of users per chat',
     showYAxisLabel : true,
-    yAxisLabel : 'RAM used'
+    yAxisLabel : 'RAM used (MBytes)'
   }
 
   colorScheme = {

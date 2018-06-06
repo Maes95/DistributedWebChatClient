@@ -1,0 +1,13 @@
+{
+  "results":[
+    "Akka-2Nodes",
+    "Akka-3Nodes",
+    "Akka-4Nodes",
+    "Vertx-2Nodes",
+    "Vertx-3Nodes",
+    "Vertx-4Nodes",
+    "RabbitMQ-2Nodes",
+    "RabbitMQ-3Nodes",
+    "RabbitMQ-4Nodes"
+  ]
+}

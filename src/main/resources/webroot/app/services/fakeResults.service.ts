@@ -1,9 +1,49 @@
 import { Injectable } from "@angular/core";
 import { Result } from '../models/result';
 
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import {Observable} from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
 @Injectable()
-export class FakeResultsService {
-  constructor() { }
+export class ResultsService {
+
+  results:Observable<Result>;
+
+  constructor(private http: Http) {
+
+      // this.results = new Observable((observer) => {
+      //
+      //   this.getJSON("./results/index.json").subscribe(index => {
+      //     for(var path of index.results){
+      //
+      //       this.getJSON("./results/"+path+".json").subscribe(data => {
+      //
+      //       })
+      //       // observer.next("bla bla bla")
+      //       // observer.complete()
+      //     }
+      //   }, console.error);
+      //
+      // })
+
+
+  }
+
+  public async getResults(){
+        var index = await this.getJSON("./results/index.json");
+        var results:Result[] = [];
+        for(var file of index.results){
+          var result_list:Result[] = await this.getJSON("./results/"+file+".json");
+          results = results.concat(result_list);
+        }
+        return results;
+  }
+
+  public getJSON(path:string) {
+       return this.http.get(path).map((res:any) => res.json()).toPromise();
+  }
 
   public generateResults(callback: Function) {
     var i = 0;
