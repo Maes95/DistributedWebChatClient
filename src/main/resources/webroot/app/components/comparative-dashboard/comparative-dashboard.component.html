@@ -7,7 +7,7 @@
 
     <div class="ui grid stackable">
 
-      <div class="ten wide column" >
+      <div class="ten wide column main-comparative" >
 
         <div id="analytics">
           <div class="ui secondary menu">
@@ -25,7 +25,8 @@
           </div>
           <div *ngFor="let key of keys(time_graphics.data);let i = index;" class="ui tab" [ngClass]="{'active': tab==i}">
 
-            <div class="chart-container">
+            <i class="download icon" (click)="saveImg(key +'-size-times', time_graphics.data[key].name )"></i>
+            <div class="chart-container" id="{{key +'-size-times'}}">
               <!-- TIME CHART -->
               <ngx-charts-line-chart
                 [scheme]="colorScheme"
@@ -38,12 +39,12 @@
                 [showYAxisLabel]="timesConfig.showYAxisLabel"
                 [xAxisLabel]="timesConfig.xAxisLabel"
                 [yAxisLabel]="timesConfig.yAxisLabel"
-                [autoScale]="true">
+                [yScaleMin]="0">
               </ngx-charts-line-chart>
             </div>
 
-
-            <div class="chart-container">
+            <i class="download icon" (click)="saveImg(key +'-size-cpu', cpu_graphics.data[key].name )"></i>
+            <div class="chart-container" id="{{key +'-size-cpu'}}">
               <!-- CPU CHART -->
               <ngx-charts-line-chart
                 [view]="view"
@@ -57,12 +58,12 @@
                 [showYAxisLabel]="cpuConfig.showYAxisLabel"
                 [xAxisLabel]="cpuConfig.xAxisLabel"
                 [yAxisLabel]="cpuConfig.yAxisLabel"
-                [autoScale]="true">
+                [yScaleMin]="0">
               </ngx-charts-line-chart>
             </div>
 
-
-            <div class="chart-container">
+            <i class="download icon" (click)="saveImg(key +'-size-ram', ram_graphics.data[key].name )"></i>
+            <div class="chart-container" id="{{key +'-size-ram'}}">
               <!-- RAM CHART -->
               <ngx-charts-line-chart
                 [view]="view"
@@ -76,7 +77,7 @@
                 [showYAxisLabel]="ramConfig.showYAxisLabel"
                 [xAxisLabel]="ramConfig.xAxisLabel"
                 [yAxisLabel]="ramConfig.yAxisLabel"
-                [autoScale]="true">
+                [yScaleMin]="0">
               </ngx-charts-line-chart>
             </div>
 
@@ -85,7 +86,7 @@
 
     </div>
 
-    <div class="six wide column" *ngIf="cpu_node_graphics.data[globalNumChatsKey]">
+    <div class="six wide column app-metrics" *ngIf="cpu_node_graphics.data[globalNumChatsKey]">
 
       <div class="ui secondary menu">
         <a class="item" *ngFor="let app of apps;let i = index;" [ngClass]="{'active': selectedApp==app }" [ngStyle]="{'color' : colorScheme.domain[apps.indexOf(app)]}" (click)="tabApp(app)">{{ app }}</a>
@@ -95,7 +96,9 @@
         {{ selectedApp }} response times
       </h3>
 
-      <div class="chart-container">
+      <i class="download icon" (click)="saveImg(key +'-size-time-'+selectedApp, time_node_graphics.data[globalNumChatsKey].name + '-' + selectedApp)"></i>
+
+      <div class="chart-container" id="{{key +'-size-time-'+selectedApp}}">
         <!-- TIME CHART -->
         <ngx-charts-line-chart
           [scheme]="timeColor"
@@ -108,7 +111,7 @@
           [showYAxisLabel]="timesNodeConfig.showYAxisLabel"
           [xAxisLabel]="timesNodeConfig.xAxisLabel"
           [yAxisLabel]="timesNodeConfig.yAxisLabel"
-          [autoScale]="true">
+          [yScaleMin]="0">
         </ngx-charts-line-chart>
       </div>
 
@@ -116,7 +119,9 @@
         {{ selectedApp }} node's metrics
       </h3>
 
-      <div class="chart-container">
+
+      <i class="download icon" (click)="saveImg(key +'-size-cpu-'+selectedApp, cpu_node_graphics.data[globalNumChatsKey].name + '-' + selectedApp)"></i>
+      <div class="chart-container" id="{{key +'-size-cpu-'+selectedApp}}">
         <!-- CPU CHART NODES -->
         <ngx-charts-line-chart
           [scheme]="metricsColors"
@@ -129,12 +134,12 @@
           [showYAxisLabel]="cpuNodeConfig.showYAxisLabel"
           [xAxisLabel]="cpuNodeConfig.xAxisLabel"
           [yAxisLabel]="cpuNodeConfig.yAxisLabel"
-          [autoScale]="true">
+          [yScaleMin]="0">
         </ngx-charts-line-chart>
       </div>
 
-
-      <div class="chart-container">
+      <i class="download icon" (click)="saveImg(key +'-size-ram-'+selectedApp, ram_node_graphics.data[globalNumChatsKey].name + '-' + selectedApp)"></i>
+      <div class="chart-container" id="{{key +'-size-ram-'+selectedApp}}">
         <!-- RAM CHART NODES -->
         <ngx-charts-line-chart
           [scheme]="metricsColors"
@@ -147,7 +152,7 @@
           [showYAxisLabel]="ramNodeConfig.showYAxisLabel"
           [xAxisLabel]="ramNodeConfig.xAxisLabel"
           [yAxisLabel]="ramNodeConfig.yAxisLabel"
-          [autoScale]="true">
+          [yScaleMin]="0">
         </ngx-charts-line-chart>
       </div>
     </div>

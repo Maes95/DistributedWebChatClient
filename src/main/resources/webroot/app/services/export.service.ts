@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 
 declare var unescape:Function;
+declare var html2canvas:Function;
+declare var saveSvgAsPng:Function;
 
 const style = "body{background-color: #f5f5f5 !important;color: #616161 !important;}.item.title{font-size:1.1em;font-weight:700!important}#menu{width:96%;margin:1em auto}body{font-family:sans-serif;color:#333;height:auto;}.main{max-width:90%;margin:3em auto auto}h2.ui.header{margin-top:0;text-align:center}table td{text-align:center!important}table td.app-name{font-size:.9em!important;font-weight:700}.metrics-menu{width:100%!important}table td.metric{font-size:.8em!important}table td.collapsing{font-weight:700}td{font-size:.9em!important}.graphic{width:96%;margin:1em auto}";
 declare var $:any;
@@ -27,7 +29,10 @@ export class ExportService {
   }
 
   public toPNG(id:string, fileName:string) {
-      this.download(fileName + ".png", $(id)[0].toDataURL("image/png"));
+    // html2canvas(document.getElementById(id)).then((canvas:any) => {
+    //   this.download(fileName,canvas.toDataURL())
+    // });
+    saveSvgAsPng(document.querySelector("#"+id+" svg"), fileName+".png");
   }
 
   public toJSON(data:Object, fileName:string) {

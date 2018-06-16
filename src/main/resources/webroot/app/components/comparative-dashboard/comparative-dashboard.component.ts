@@ -3,7 +3,6 @@ import { Result, Message } from '../../models/result';
 import { ExportService } from '../../services/export.service';
 import { ResultsService } from '../../services/fakeResults.service';
 import { UtilsService } from '../../services/utils.service';
-import { BaseChartDirective } from 'ng2-charts';
 
 declare var $:any;
 
@@ -124,17 +123,20 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     if(this.app_index[numChatsKey][result.app] == undefined){
       // TIME
       this.time_graphics.data[numChatsKey].times.push({
-        "name": result.app + " - "+result.numChats+" room(s) - Time",
+        "name": result.app,
+        //"name": result.app + " - "+result.numChats+" room(s) - Time",
         "series": []
       })
       // CPU
       this.cpu_graphics.data[numChatsKey].metrics.push({
-        "name": result.app + " - "+result.numChats+" room(s) - %CPU use",
+        "name": result.app,
+        //"name": result.app + " - "+result.numChats+" room(s) - %CPU use",
         "series": []
       })
       // RAM
       this.ram_graphics.data[numChatsKey].metrics.push({
-        "name": result.app + " - "+result.numChats+" room(s) - Memory use (in MBytes)",
+        "name": result.app,
+        //"name": result.app + " - "+result.numChats+" room(s) - Memory use (in MBytes)",
         "series": []
       })
       this.app_index[numChatsKey][result.app] = this.time_graphics.data[numChatsKey].times.length - 1;
@@ -153,21 +155,23 @@ export class ComparativeDashboardComponent implements AfterViewInit{
       ram += (node.ram.reduceRight( (a,b) => a + b , 0) / node.ram.length)
     }
 
+    let numMessages = (result.numUsers * result.numUsers * 100 * result.numChats).toString();
+
     // TIME
     this.time_graphics.data[numChatsKey].times[appIndex].series.push({
-      "name": result.numUsers.toString(),
+      "name": numMessages,
       "value": result.avgTime
     });
 
     // CPU
     this.cpu_graphics.data[numChatsKey].metrics[appIndex].series.push({
-      "name": result.numUsers.toString(),
+      "name": numMessages,
       "value": cpu / result.nodesMetrics.length
     });
 
     // RAM
     this.ram_graphics.data[numChatsKey].metrics[appIndex].series.push({
-      "name": result.numUsers.toString(),
+      "name": numMessages,
       "value": ram / result.nodesMetrics.length
     });
 
@@ -260,6 +264,16 @@ export class ComparativeDashboardComponent implements AfterViewInit{
 
   globalNumChatsKey:string;
 
+  public saveImg (key:any, name:any) {
+   console.log(key, name)
+   this._export.toPNG(key, name );
+  //  switch(item.tab){
+  //    case 0: this._export.toPNG( '#' + item.chatSize + '-size-times', item.title ); break;
+  //    case 1: this._export.toPNG( '#' + item.chatSize + '-size-cpu', item.title ); break;
+  //    case 2: this._export.toPNG( '#' + item.chatSize + '-size-memory', item.title ); break;
+  //  }
+ }
+
   public tabf(index:number){
     let keys = this.keys(this.time_graphics.data);
     this.globalNumChatsKey = keys[index];
@@ -304,7 +318,7 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     gradient : true,
     showLegend : true,
     showXAxisLabel : true,
-    xAxisLabel : 'Nº of users per chat',
+    xAxisLabel : 'Nº of messages',
     showYAxisLabel : true,
     yAxisLabel : 'Time (in milliseconds)'
   }
@@ -316,7 +330,7 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     gradient : true,
     showLegend : true,
     showXAxisLabel : true,
-    xAxisLabel : 'Nº of users per chat',
+    xAxisLabel : 'Nº of messages',
     showYAxisLabel : true,
     yAxisLabel : '% CPU used'
   }
@@ -328,7 +342,7 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     gradient : true,
     showLegend : true,
     showXAxisLabel : true,
-    xAxisLabel : 'Nº of users per chat',
+    xAxisLabel : 'Nº of messages',
     showYAxisLabel : true,
     yAxisLabel : 'RAM used (MBytes)'
   }
@@ -340,7 +354,7 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     gradient : true,
     showLegend : false,
     showXAxisLabel : true,
-    xAxisLabel : 'Nº of users per chat',
+    xAxisLabel : 'Nº of messages',
     showYAxisLabel : true,
     yAxisLabel : 'Time (in milliseconds)'
   }
@@ -352,7 +366,7 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     gradient : true,
     showLegend : false,
     showXAxisLabel : true,
-    xAxisLabel : 'Nº of users per chat',
+    xAxisLabel : 'Nº of messages',
     showYAxisLabel : true,
     yAxisLabel : '% CPU used'
   }
@@ -364,7 +378,7 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     gradient : true,
     showLegend : false,
     showXAxisLabel : true,
-    xAxisLabel : 'Nº of users per chat',
+    xAxisLabel : 'Nº of messages',
     showYAxisLabel : true,
     yAxisLabel : 'RAM used (MBytes)'
   }

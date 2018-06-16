@@ -25,3 +25,23 @@
 .buttons-container .button{
   float: right;
 }
+
+.download.icon{
+  cursor: pointer;
+}
+
+.download.icon:hover + .chart-container{
+  background: rgba(0,0,0,0.03);
+}
+
+.main-comparative .download.icon{
+  position: absolute;
+}
+
+.app-metrics .download.icon{
+  position: absolute;
+}
+
+.download.icon:hover{
+  color: black;
+}
