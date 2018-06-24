@@ -21,6 +21,7 @@ public class ClientGenerator extends AbstractVerticle {
 	public static final int NUM_MESSAGES = 100;
 	public static final int TIME = 1000;
 	public static final int DELAY = 1000;
+	public static final String ENDPOINT = "/chat";
 
 	// CLASS VARIABLES
 	private int totalMessagePerChat;
@@ -29,7 +30,7 @@ public class ClientGenerator extends AbstractVerticle {
 	private final AtomicLong times = new AtomicLong(0);
 	private final AtomicInteger done = new AtomicInteger(0);
 	private final AtomicBoolean finished = new AtomicBoolean(true);
-	private Handler<AsyncResult<Result>> handler;
+	private final Handler<AsyncResult<Result>> handler;
 	private final int totalUsers;
 
 	private final Result result;
@@ -78,54 +79,53 @@ public class ClientGenerator extends AbstractVerticle {
 
 	  final AtomicInteger numberOfMessages = new AtomicInteger(0);
 
-	  vertx.createHttpClient().websocket(config.getPort(), config.getAddress(), "/chat", websocket -> {
+	  vertx.createHttpClient().websocket(config.getPort(), config.getAddress(), ENDPOINT, websocket -> {
 
-	  websocket.handler((Buffer buffer) -> {
-          String respuesta = ClientUtils.parseBuffer(buffer);
-          Long _time = System.currentTimeMillis()-Long.parseLong(respuesta.substring(respuesta.indexOf("/") + 1));
-          times.addAndGet(_time);
-          numberOfMessages.addAndGet(1);
-          // When THIS user recive all messages from his chat
-          if (numberOfMessages.get()== totalMessagePerChat){
-              websocket.close();
-              // When ALL users recive all messages
-              done.addAndGet(1);
-              if (done.get()==this.totalUsers){
-                  finishTest(totalMessages);
-              }
-          }
-      });
-
-      // CONNECTION MESSAGE
-
-      websocket.writeFinalTextFrame("{\"chat\":\""+chatName+"\",\"name\":\""+userName+"\"}");
-
-      //SENDER
-
-      vertx.setTimer(2000, (Long arg0) -> {
-          vertx.setPeriodic(TIME / NUM_MESSAGES, new Handler<Long>() {
-              int i = 0;
-
-              @Override
-              public void handle(Long arg0) {
-                  if (i < NUM_MESSAGES) {
-                  websocket.writeFinalTextFrame(
-                          "{\"name\":\""+userName+"\","
-                          + "\"chat\":\""+chatName+"\","
-                          +"\"message\":\""+Integer.toString(sentMessages.getAndAdd(1))+"/"+System.currentTimeMillis()+"\"}");
-                      i++;
+          websocket.handler((Buffer buffer) -> {
+              String respuesta = ClientUtils.parseBuffer(buffer);
+              Long _time = System.currentTimeMillis()-Long.parseLong(respuesta.substring(respuesta.indexOf("/") + 1));
+              times.addAndGet(_time);
+              numberOfMessages.addAndGet(1);
+              // When THIS user recive all messages from his chat
+              if (numberOfMessages.get()== totalMessagePerChat){
+                  websocket.close();
+                  // When ALL users recive all messages
+                  done.addAndGet(1);
+                  if (done.get()==this.totalUsers){
+                      finishTest(totalMessages);
                   }
-	          }
-          	});
-	      });
-	  });
+              }
+          });
 
+          // CONNECTION MESSAGE
+
+          websocket.writeFinalTextFrame("{\"chat\":\""+chatName+"\",\"name\":\""+userName+"\"}");
+
+          //SENDER
+
+          vertx.setTimer(2000, (Long arg0) -> {
+              vertx.setPeriodic(TIME / NUM_MESSAGES, new Handler<Long>() {
+                  int i = 0;
+
+                  @Override
+                  public void handle(Long arg0) {
+                      if (i < NUM_MESSAGES) {
+                      websocket.writeFinalTextFrame(
+                              "{\"name\":\""+userName+"\","
+                              + "\"chat\":\""+chatName+"\","
+                              +"\"message\":\""+Integer.toString(sentMessages.getAndAdd(1))+"/"+System.currentTimeMillis()+"\"}");
+                          i++;
+                      }
+                  }
+              });
+          });
+
+	  });
 
   }
 
   public synchronized void finishTest(long totalMessages){
-      if(finished.get()){
-			finished.getAndSet(false);
+      if(finished.getAndSet(false)){
 			long avg_time = times.get()/totalMessages;
 		  	result.addTime(avg_time);
 			vertx.undeploy(this.deploymentID(), res -> {

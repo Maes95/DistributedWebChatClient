@@ -1,1 +1,287 @@
-[{"numChats":1,"numUsers":10,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":47,"times":[46,48,48,46,48,48,48,47,48],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[11.8,10.4,15.9,13.4,15.9,17.3],"ram":[244,248,248,248,248,247]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[23.9,22.3,18.8,14.6,15.2,14.6,18.9,19.7,19.4,17.8,17.9,16.8],"ram":[241,246,253,252,253,249,251,250,252,253,252,254]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[24.5,13,23.7,12.5,16.4,18,15.3,15.3],"ram":[246,249,249,250,251,253,254,254]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[12,15.3,17.9,10.8],"ram":[255,258,257,258]}]},{"numChats":1,"numUsers":20,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":59,"times":[50,51,50,51,116,51,53,65,50],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[27.4,24.8,31.4,33.6,31.2,30.6],"ram":[257,255,255,264,261,260]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[27.5,28,29.2,33.1,32.9,29.5,29,29.4,25.4,26.4,29.9],"ram":[253,254,256,262,260,260,264,261,260,259,260]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[29.4,28.6,40.3,36.4,33,37.1,31.4,33.3],"ram":[259,257,257,263,265,266,269,265]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[31.3,26.3,37.5,34],"ram":[267,265,261,269]}]},{"numChats":1,"numUsers":30,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":509,"times":[520,550,503,491,512,431,571,514,494],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[44,41,30.3,26.5,34.1,32.1,32.7,47.3,31.8],"ram":[282,283,278,279,283,284,307,275,288]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[37.5,32.5,39.1,35.3,40.4,42.7,33.7,46.8,33.2,42.9,31.9,32.6,37,41.9],"ram":[263,272,267,273,272,277,282,270,267,290,271,288,275,271]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[31.9,33.7,17.8,30.8,28.2,41.2,32.3,43.1,14.6,48.7,34.1,38],"ram":[293,288,278,273,288,283,282,286,285,284,282,296]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[40.9,44.6,36.2,33.1,39.7,33.1,39.3],"ram":[282,281,296,292,287,303,301]}]},{"numChats":1,"numUsers":40,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":1449,"times":[1422,1460,1383,1446,1437,1473,1464,1494,1468],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[57,50.5,43.5,46.2,37.7,50.3,32.7,45.7,35.2,46.5,29.3,46.8],"ram":[286,318,310,316,318,289,316,317,306,315,308,309]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[66,66.3,63.3,67.9,48.2,72.3,39.5,65.3,30.7,67.4,36.8,65.6,24.6,31.2,68.4,41.2,47.8],"ram":[273,283,288,288,290,283,325,290,330,287,319,288,315,321,286,293,316]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[70.3,66.8,63.5,58.5,45.4,66.1,33.1,69.5,22.3,63.3,30.4,64,29,22.5,63.2],"ram":[289,294,290,290,314,287,322,292,314,289,321,287,305,321,291]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[41.7,42,35.8,36.5,29.4,35.1,33.8,48.8,43.9,37.8],"ram":[325,325,325,324,328,305,307,321,311,334]}]},{"numChats":1,"numUsers":50,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":2863,"times":[2894,2847,2847,2921,2876,2840,2851,2883,2811],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[69.9,64.9,69.4,42.7,73.3,38.6,74,25.9,72.5,72.2,26.9,72.8,71.8,35.7,74.8,71.8,35.7,36.6,76.3,70],"ram":[321,318,333,351,323,353,308,353,298,298,353,296,336,357,302,317,355,349,306,327]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[75.7,73.8,75.1,45,77.7,33.9,75.8,49,75.4,74.4,32,67.9,75.9,58.6,52.5,75.3,35.7,34.1,41.5,76.7,70.5,43.2,50.8,70.1,69],"ram":[286,297,295,348,294,352,308,358,303,302,354,306,305,359,358,294,338,336,342,291,330,361,357,300,305]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[36.1,24.9,22.8,74.7,24.7,79.1,33.2,74.3,18.8,20.7,78.8,35.6,30.2,77.7,35.7,18.2,73.3,72.7,54,30.1,67.4,76.1],"ram":[348,349,355,301,350,313,364,312,356,360,310,354,364,307,352,356,304,302,352,357,307,306]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[68.7,60.4,56.5,35.5,56,50.5,44.1,64.6,47.8,48,72.3,31.7,48.7,71.8,12.8,47.7,74,73.4],"ram":[307,305,313,353,315,371,365,324,356,346,329,367,347,318,366,333,316,331]}]},{"numChats":2,"numUsers":20,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":651,"times":[806,479,804,565,514,557,787,649,703],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[41.9,47,37.8,41.9,51.2,47.3,47.5],"ram":[288,295,292,285,286,299,296]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[29.3,36.8,35.2,27.6,36.4,41.4,37.1,37.7,38.2,25,21.3,37.7,36.1],"ram":[293,282,282,289,283,284,282,286,285,286,286,284,292]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[29.4,33.8,32.7,33.2,37.5,39.9,39.8,34.4,36,29.9,29.9],"ram":[296,294,296,307,292,296,298,305,306,296,300]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[35.3,41.2,36.1,22.9,42.2],"ram":[292,292,293,297,293]}]},{"numChats":2,"numUsers":25,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":1778,"times":[1922,1873,1860,1782,1784,1771,1807,1609,1599],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[45.5,60.7,66.2,50.3],"ram":[312,289,282,299]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[53.8,59.3,59.9,39.9,53,53,55.3,62,62.7,44.9],"ram":[300,289,286,311,293,294,293,295,289,319]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[47.3,53.5,60.3,52.5,56.2,58.3],"ram":[315,300,292,312,288,314]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[51.5,49.5,51.5],"ram":[311,319,302]}]},{"numChats":2,"numUsers":30,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":3845,"times":[4009,4265,3865,3919,3740,3986,3882,3322,3622],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[28.4,26,48.6,54.1,49.3,51,30.6,51,41.7,72,61.1,54.9,69.8,28.9,32.6],"ram":[335,343,348,299,314,312,331,351,355,303,312,316,298,338,335]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[69.1,74.6,73.4,68.4,64.4,43.2,77.1,65.7,76.4,50.5,56.7,69.1,28.4,68.1,74.3,65.8,71.1,74,40.6,46.8,51.3,69],"ram":[283,300,301,300,297,319,298,324,306,329,317,297,297,292,288,305,305,308,355,353,348,306]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[41.1,44.1,59.3,8.8,12.8,26.8,56.3,50.3,54.3,9.2,7.1,16.2,36.5,41.8,53.9,41.5,42.5,57],"ram":[294,329,337,346,339,340,336,350,352,341,337,341,334,342,331,335,336,312]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[32.1,33.3,75.3,74.7,71.7,63,20.2,73.3,64.8,63.8,72.8,64,62],"ram":[324,312,307,304,303,303,344,308,315,307,307,308,305]}]},{"numChats":4,"numUsers":10,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":199,"times":[194,196,213,191,201,197,198,201,207],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[26.8,34.5,26.8,42.8,28.2,32.8],"ram":[282,285,284,285,288,287]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[23.5,33.2,27.9,34.7,28.5,33.6,26.3,23.8,32,34.2],"ram":[297,291,289,293,296,288,294,292,298,292]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[28.8,34.6,27.9,39.5,31.4,34.1,29.4,29.3],"ram":[290,290,288,291,292,292,291,288]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[29.4,33.3,25.8,31.9],"ram":[295,296,296,298]}]},{"numChats":4,"numUsers":12,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":369,"times":[622,210,454,316,207,281,559,244,436],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[],"ram":[]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[31.6,32.2,37.3],"ram":[298,297,292]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[33.9,31.9],"ram":[296,302]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[],"ram":[]}]},{"numChats":4,"numUsers":15,"app":"RabbitMQ","isDistributed":true,"globalDefinition":null,"specificDefinition":null,"avgTime":1980,"times":[1521,1386,2759,2100,2983,2217,1118,1685,2058],"nodesMetrics":[{"id":"ubuntu@ec2-52-211-47-110.eu-west-1.compute.amazonaws.com","cpuUse":[45.2,46.2,49.3,49.7,56.5],"ram":[308,298,284,283,297]},{"id":"ubuntu@ec2-34-247-46-40.eu-west-1.compute.amazonaws.com","cpuUse":[40.4,41.5,63,63.7,43.3,35.5,48.5,40.1,22.6],"ram":[308,312,292,291,311,306,292,292,296]},{"id":"ubuntu@ec2-52-208-214-14.eu-west-1.compute.amazonaws.com","cpuUse":[39.9,42.2,58.6,59.1,44.7,47.2],"ram":[308,301,296,295,315,315]},{"id":"ubuntu@ec2-54-72-175-176.eu-west-1.compute.amazonaws.com","cpuUse":[43.2,40.2,30.2,31.2],"ram":[310,305,308,308]}]}]
+[{
+  "numChats": 1,
+  "numUsers": 10,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 47,
+  "times": [47, 45, 47, 49, 50, 45, 50, 48, 46],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [16.5, 12.5, 15.2, 9.3],
+    "ram": [229, 232, 231, 232]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [22.6, 22.1, 20.6, 16.4, 10.7, 15.7, 15.8, 16.2, 15.6, 14.8, 16.4, 16],
+    "ram": [243, 247, 250, 250, 251, 250, 253, 251, 253, 254, 253, 255]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [11.4, 10.2, 16.4, 10.8, 12.6, 16.3],
+    "ram": [236, 238, 239, 239, 239, 239]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [28.3, 17.8, 17.1, 12.8, 13.9, 13.4, 16.1, 16.1],
+    "ram": [228, 233, 233, 234, 231, 233, 236, 236]
+  }]
+}, {
+  "numChats": 1,
+  "numUsers": 20,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 50,
+  "times": [53, 50, 51, 49, 48, 50, 48, 51, 53],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [27.9, 33.8, 34.6, 34.2],
+    "ram": [238, 238, 246, 250]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [26.4, 27.4, 30.1, 29.5, 34.3, 29.6, 25.5, 26.7, 33.7, 32.1, 26.6],
+    "ram": [257, 259, 262, 265, 263, 263, 265, 263, 264, 270, 264]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [23.5, 34.2, 30, 31.7, 29.5],
+    "ram": [249, 247, 251, 254, 256]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [26.8, 32.3, 37.3, 36, 30.5, 32, 26.2, 29.5],
+    "ram": [239, 240, 242, 246, 242, 243, 249, 244]
+  }]
+}, {
+  "numChats": 1,
+  "numUsers": 30,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 366,
+  "times": [368, 410, 360, 341, 338, 337, 371, 391, 385],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [35.7, 43.1, 37.2, 46, 37.5],
+    "ram": [263, 254, 265, 258, 262]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [37.2, 26.3, 33.2, 25.3, 39, 25.2, 25.6, 40.7, 34, 34.8, 26.4, 32.6, 32.2],
+    "ram": [266, 275, 275, 275, 273, 291, 283, 279, 279, 284, 284, 280, 279]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [42.6, 40, 39.4, 35, 37.5, 35.4, 38.7],
+    "ram": [273, 264, 277, 265, 276, 278, 266]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [37.1, 35.2, 31.4, 33.4, 24.8, 35.5, 42.1, 36.5, 43.1, 24.9, 31.6],
+    "ram": [272, 282, 262, 270, 259, 283, 283, 278, 273, 260, 276]
+  }]
+}, {
+  "numChats": 1,
+  "numUsers": 40,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 1106,
+  "times": [1172, 1189, 1106, 1074, 1038, 1066, 1099, 1127, 1087],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [64.9, 58.5, 62.2, 57.3, 55.7, 57.1, 47.2, 54.8, 47.5],
+    "ram": [282, 280, 280, 279, 276, 273, 284, 273, 270]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [58.2, 64.3, 57.5, 58.4, 60.9, 59.7, 55.2, 57.5, 61.7, 54.4, 58.8, 50.5, 54.3, 55.7, 55.4, 45.4, 53.2],
+    "ram": [277, 288, 291, 288, 284, 287, 285, 285, 286, 288, 290, 291, 294, 293, 293, 318, 293]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [67.4, 65.9, 62.3, 60.7, 59.2, 61.1, 57.5, 63.9, 55.3, 57.1, 54],
+    "ram": [281, 284, 282, 285, 282, 282, 278, 280, 272, 276, 285]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [66.7, 58.2, 56.2, 58.1, 55.3, 56, 60, 63.3, 57.6, 55.2, 54.8, 52.4, 53.8, 54],
+    "ram": [273, 270, 269, 276, 283, 275, 268, 270, 271, 274, 273, 274, 281, 281]
+  }]
+}, {
+  "numChats": 1,
+  "numUsers": 50,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 2474,
+  "times": [2576, 2424, 2526, 2519, 2433, 2529, 2292, 2617, 2358],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [68.8, 65.1, 69.1, 54.5, 70.9, 27.3, 71.4, 53.8, 69.8, 22.7, 41, 68.4, 56.5, 39.2, 75.4],
+    "ram": [277, 289, 292, 328, 286, 348, 270, 283, 286, 328, 329, 281, 302, 320, 284]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [74.4, 75.3, 76.7, 42.8, 70.9, 19.7, 75.1, 51.8, 73.5, 25.5, 43.8, 74.9, 70.1, 42.5, 72.7, 17.4, 23.9, 74.8, 69.6, 52.5, 47.8, 56.5, 72],
+    "ram": [295, 303, 308, 354, 302, 356, 308, 335, 312, 363, 359, 317, 328, 372, 311, 354, 355, 309, 316, 352, 353, 338, 311]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [44.4, 59.3, 33.7, 74.4, 43.4, 55.7, 44.8, 65.7, 54.4, 56.3, 76.2, 33.6, 24.7, 73.3, 47, 61.9, 69.9],
+    "ram": [350, 323, 350, 296, 352, 315, 346, 300, 340, 301, 298, 350, 356, 290, 342, 304, 302]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [39.7, 29.4, 50.5, 17.2, 25.8, 74, 31.9, 12.2, 30.5, 71.7, 48, 37.2, 54.7, 20.3, 26.9, 72.4, 71.2, 33.6, 56.9, 74.3],
+    "ram": [319, 310, 321, 319, 318, 291, 337, 329, 326, 291, 331, 331, 281, 322, 317, 300, 316, 337, 295, 287]
+  }]
+}, {
+  "numChats": 2,
+  "numUsers": 20,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 361,
+  "times": [268, 288, 311, 245, 527, 390, 227, 553, 446],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [31.5, 35.1, 26.8, 40.5, 27.2],
+    "ram": [262, 274, 268, 267, 269]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [31.6, 33.4, 30.4, 33.1, 31.8, 35.3, 42.7, 31, 39.5, 37.6, 38.3, 34.9],
+    "ram": [303, 283, 283, 285, 293, 284, 289, 287, 285, 284, 289, 284]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [42.1, 34.6, 31.4, 36.2, 36.5, 42.4, 37.4],
+    "ram": [281, 287, 285, 284, 290, 281, 282]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [37.7, 37.6, 33.8, 39.1, 28.8, 38.4, 42.8, 34.8, 28.5],
+    "ram": [262, 271, 270, 267, 275, 265, 261, 268, 269]
+  }]
+}, {
+  "numChats": 2,
+  "numUsers": 25,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 1645,
+  "times": [2070, 1783, 1596, 1483, 1376, 1472, 1680, 1665, 1680],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [48],
+    "ram": [287]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [46.5, 49.7, 42.8, 47.2, 63.3, 64.2, 43.2],
+    "ram": [293, 288, 318, 292, 293, 293, 316]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [53, 54.2, 50],
+    "ram": [286, 278, 300]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [49.2, 45.5, 41.6, 60],
+    "ram": [270, 267, 286, 267]
+  }]
+}, {
+  "numChats": 2,
+  "numUsers": 30,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 2748,
+  "times": [2803, 3070, 2768, 2762, 2864, 2686, 2598, 2599, 2582],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [64.8, 52.8, 49.3, 49.3, 59.7, 59.7, 51.7, 52.2, 51.2, 53.3],
+    "ram": [288, 306, 300, 301, 293, 293, 292, 293, 289, 287]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [31.5, 57.8, 72.3, 68.2, 71.1, 67.5, 54.8, 72, 52.7, 71.3, 51.5, 66.8, 57.5, 57.2, 64.3, 49.3, 52.2],
+    "ram": [325, 299, 307, 310, 315, 314, 348, 315, 355, 314, 329, 316, 306, 306, 303, 340, 340]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [47.1, 64.9, 56.2, 55.7, 49.5, 55.1, 51.2, 57, 56.8, 55.7, 54, 56.3],
+    "ram": [299, 285, 297, 295, 308, 294, 318, 292, 302, 324, 281, 279]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [34.7, 61.8, 65, 65.6, 65, 72.8, 50, 67.9, 50, 65.3, 47.3, 65, 57.8, 58.9, 72.1],
+    "ram": [298, 274, 272, 276, 288, 276, 286, 273, 283, 276, 303, 273, 270, 270, 270]
+  }]
+}, {
+  "numChats": 4,
+  "numUsers": 10,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 199,
+  "times": [216, 201, 188, 194, 198, 198, 207, 200, 192],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [22.7],
+    "ram": [270]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [20.8, 23.8, 20.4, 32.1, 28.8, 37.6, 26.5, 25.9],
+    "ram": [297, 302, 306, 300, 298, 298, 296, 299]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [23.4, 23.2, 23.2],
+    "ram": [280, 283, 285]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [22.7, 26.9, 25.5, 28.5, 25.8],
+    "ram": [265, 274, 273, 267, 265]
+  }]
+}, {
+  "numChats": 4,
+  "numUsers": 12,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 253,
+  "times": [213, 225, 279, 228, 210, 241, 419, 208, 254],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [32.6],
+    "ram": [302]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [33.4, 33.4, 26.5],
+    "ram": [301, 306, 300]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [32.7],
+    "ram": [280]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [30.5, 32.5],
+    "ram": [269, 278]
+  }]
+}, {
+  "numChats": 4,
+  "numUsers": 15,
+  "app": "RabbitMQ",
+  "isDistributed": true,
+  "globalDefinition": null,
+  "specificDefinition": null,
+  "avgTime": 1133,
+  "times": [788, 831, 666, 910, 1499, 907, 1244, 1781, 1579],
+  "nodesMetrics": [{
+    "id": "ubuntu@ec2-54-154-139-105.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [31.5, 46.5, 23.9],
+    "ram": [281, 279, 279]
+  }, {
+    "id": "ubuntu@ec2-34-252-219-26.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [31.4, 41.6, 38.3, 36.7, 37, 31.5, 44.5, 35.9, 45.5],
+    "ram": [312, 300, 304, 303, 300, 304, 314, 303, 304]
+  }, {
+    "id": "ubuntu@ec2-34-244-114-112.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [49.3, 38.5, 34.1, 51.9],
+    "ram": [284, 302, 280, 278]
+  }, {
+    "id": "ubuntu@ec2-52-49-34-250.eu-west-1.compute.amazonaws.com",
+    "cpuUse": [43, 30.6, 38.7, 39.4, 32.6, 37.6, 43.2, 41.9],
+    "ram": [285, 283, 277, 274, 276, 280, 278, 286]
+  }]
+}]

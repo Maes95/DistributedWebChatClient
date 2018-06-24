@@ -4,7 +4,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import models.Case;
 import models.Result;
@@ -55,24 +54,6 @@ public class ClientManager extends AbstractVerticle{
 			}));
 		}
 
-	}
-
-	private void test(){
-		JsonObject _config = new JsonObject()
-				.put("port", 9000)
-				.put("address", "localhost")
-				.put("name","Vertx")
-				.put("globalDefinition","")
-				.put("specificDefinition","")
-				.put("pem","TFG.pem")
-				.put("isDistributed",false)
-				.put("nodes", new JsonArray())
-				.put("cases", new JsonArray()
-						.add(new JsonObject().put("numChats", 1).put("numUsers", 5))
-						.add(new JsonObject().put("numChats", 1).put("numUsers", 10))
-				);
-
-		vertx.eventBus().send("create.test", _config);
 	}
 
 }

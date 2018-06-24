@@ -33,13 +33,19 @@
                 </div>
               </div>
             </div>
+
+            <div class="field" *ngIf="app.isDistributed">
+              <label>PEM</label>
+              <input type="text" name="pem" placeholder="Key.pem" [(ngModel)]="app.pem">
+            </div>
+
             <div class="ui checkbox">
               <input type="checkbox" name="example" [(ngModel)]="app.isDistributed">
               <label>Distributed app</label>
             </div>
 
             <!-- APP DETAILS -->
-            <h4 *ngIf="app.isDistributed"class="ui dividing header">Nodes</h4>
+            <h4 *ngIf="app.isDistributed" class="ui dividing header">Nodes</h4>
             <div *ngIf="app.isDistributed">
 
               <div class="ui labeled input fluid icon node-input" *ngFor="let node of app.nodes; let i= index;">

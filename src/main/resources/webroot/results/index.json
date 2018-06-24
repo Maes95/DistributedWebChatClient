@@ -8,6 +8,9 @@
     "Vertx-4Nodes",
     "RabbitMQ-2Nodes",
     "RabbitMQ-3Nodes",
-    "RabbitMQ-4Nodes"
+    "RabbitMQ-4Nodes",
+    "Hazelcast-2Nodes",
+    "Hazelcast-3Nodes",
+    "Hazelcast-4Nodes"
   ]
 }
