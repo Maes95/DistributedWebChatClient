@@ -45,3 +45,18 @@
 .download.icon:hover{
   color: black;
 }
+
+.modal{
+  margin: auto !important;
+  margin-top: 250px !important;
+}
+
+.ui.modal > .close{
+  right: 5px !important;
+  top: 5px !important;
+  color: rgb(97,97,97) !important;
+}
+
+.ui.modal > .content{
+  height: 500px !important;
+}

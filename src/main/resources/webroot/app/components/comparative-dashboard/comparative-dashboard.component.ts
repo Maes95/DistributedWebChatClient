@@ -309,6 +309,10 @@ export class ComparativeDashboardComponent implements AfterViewInit{
     return color;
   }
 
+  public seeBubbleChart(){
+    $('.ui.modal').modal('show');
+  }
+
   tab:number;
 
   timesConfig = {
@@ -406,5 +410,52 @@ export class ComparativeDashboardComponent implements AfterViewInit{
         };
     }
   }
+
+  public bubbleData = [
+        {
+          "name": "Akka",
+          "series": [
+            {
+              "name": "Akka",
+              "x": 51,
+              "y": 257,
+              "r": 1132*10
+            }
+          ]
+        },
+        {
+          "name": "Vert.x",
+          "series": [
+            {
+              "name": "Vert.x",
+              "x": 31,
+              "y": 236,
+              "r": 380*10
+            }
+          ]
+        },
+        {
+          "name": "RabbitMQ",
+          "series": [
+            {
+              "name": "RabbitMQ",
+              "x": 67,
+              "y": 428,
+              "r": 6680*10
+            }
+          ]
+        },
+        {
+          "name": "Hazelcast",
+          "series": [
+            {
+              "name": "Hazelcast",
+              "x": 30,
+              "y": 326,
+              "r": 4477*10
+            }
+          ]
+        },
+      ]
 
 }
